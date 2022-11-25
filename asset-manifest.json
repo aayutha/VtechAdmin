@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/VtechAdmin/static/css/main.073c9b0a.css",
+    "main.js": "/VtechAdmin/static/js/main.d15ade56.js",
+    "static/js/787.182c5a26.chunk.js": "/VtechAdmin/static/js/787.182c5a26.chunk.js",
+    "static/media/logo.svg": "/VtechAdmin/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "index.html": "/VtechAdmin/index.html",
+    "main.073c9b0a.css.map": "/VtechAdmin/static/css/main.073c9b0a.css.map",
+    "main.d15ade56.js.map": "/VtechAdmin/static/js/main.d15ade56.js.map",
+    "787.182c5a26.chunk.js.map": "/VtechAdmin/static/js/787.182c5a26.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.073c9b0a.css",
+    "static/js/main.d15ade56.js"
+  ]
+}
