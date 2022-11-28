@@ -12,9 +12,9 @@ function App() {
         {/* <Login /> */}
         {/* <Forgotpass /> */}
         {/* <Signup /> */}
-        <Course/> 
-         <Feedback/>
-        <Activity/>
+        <Course />
+        {/* <Feedback /> */}
+        {/* <Activity /> */}
       </div>
     </>
   );
