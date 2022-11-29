@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import List from '@mui/material/List';
@@ -15,7 +15,8 @@ import Grid from '@mui/material/Grid';
 import FolderIcon from '@mui/icons-material/Folder';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { db } from "../../firebase";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, getDocs, getDoc } from "firebase/firestore";
+import { async } from "@firebase/util";
 
 function generate(element) {
   return [0, 1, 2].map((value) =>
@@ -33,6 +34,29 @@ const Course = () => {
   const [courseName, setcourseName] = useState("")
   const [Cdescription, setCdescription] = useState("")
   const [CImageUrl, setCImageUrl] = useState("")
+  const [orderDetail, setOrderDetail] = useState([]);
+
+  useEffect(() => {
+    getOrderData();
+  }, [])
+  const getOrderData = async () => {
+    let resultArray = [];
+    const docRef = collection(db, "Courses");
+    try {
+      const docSnap = await getDocs(docRef);
+      console.log(docSnap.data());
+    } catch (error) {
+      console.log(error)
+    }
+
+    // const baseQuery = collection(db, "Courses");
+    // getDocs(baseQuery).then((res) => {
+    //   res.forEach((item) => {
+    //     resultArray.push({ id: item.id, ...item.data() });
+    //   })
+    //   setOrderDetail(resultArray)
+    // })
+  }
   const SubmitFeedback = async () => {
 
     console.log(courseName)
@@ -128,6 +152,14 @@ const Course = () => {
           </Box>
         </form>
         <div>
+          {
+            orderDetail.length === 0 ?
+              orderDetail.map((item) => {
+                <ul>
+                  <li>item.Name</li>
+                </ul>
+              }) : null
+          }
 
         </div>
       </div>
