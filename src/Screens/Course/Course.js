@@ -44,18 +44,14 @@ const Course = () => {
     const docRef = collection(db, "Courses");
     try {
       const docSnap = await getDocs(docRef);
-      console.log(docSnap.data());
+      docSnap.forEach((item)=>{
+        resultArray.push({ id: item.id, ...item.data() });
+      });
+      console.log(resultArray);
+      setOrderDetail(resultArray);
     } catch (error) {
       console.log(error)
     }
-
-    // const baseQuery = collection(db, "Courses");
-    // getDocs(baseQuery).then((res) => {
-    //   res.forEach((item) => {
-    //     resultArray.push({ id: item.id, ...item.data() });
-    //   })
-    //   setOrderDetail(resultArray)
-    // })
   }
   const SubmitFeedback = async () => {
 
@@ -121,25 +117,37 @@ const Course = () => {
                 </Typography>
                 <Demo sx={{ m: 1 }}>
                   <List dense={dense} >
-                    {generate(
-                      <ListItem sx={{ m: 3, width: 300 }}
-                        secondaryAction={
-                          <IconButton edge="end" aria-label="delete">
-                            <DeleteIcon />
-                          </IconButton>
-                        }
-                      >
-                        <ListItemAvatar   >
-                          <Avatar>
-                            <FolderIcon />
-                          </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText
-                          primary="Digital-Marketing"
-                          secondary={secondary ? 'Secondary text' : null}
-                        />
-                      </ListItem>,
-                    )}
+                    {
+                      orderDetail.length===0?null:
+                      orderDetail.map((item,index)=>(
+                        <ListItem 
+                          key={index}
+                          sx={{ m: 3, width: 300 }}
+                          secondaryAction={
+                            <IconButton edge="end" aria-label="delete">
+                              <DeleteIcon />
+                            </IconButton>
+                          }
+                        >
+                          <ListItemAvatar   >
+                            <Avatar>
+                              <FolderIcon />
+                            </Avatar>
+                          </ListItemAvatar>
+                         <div style={{display:'flex',flexDirection:'column'}}>
+                          <ListItemText
+                            primary={item.Name}
+                            secondary={secondary ? 'Secondary text' : null}
+                            />
+                            <ListItemText
+
+                            primary={item.Description}
+                            secondary={secondary ? 'Secondary text' : null}
+                            />
+                         </div>
+                        </ListItem> 
+                      ))
+                    }
                   </List>
                 </Demo>
               </Grid>
