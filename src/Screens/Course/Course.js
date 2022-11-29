@@ -67,7 +67,6 @@ const Course = () => {
       console.log(error)
     }
   }
-
   const SubmitFeedback = async () => {
 
     console.log(courseName)
