@@ -79,6 +79,7 @@ const Course = () => {
         ImageUrl: CImageUrl
       }).then((docRef) => {
         console.log(docRef.id)
+        getOrderData();
       }).catch((error) => {
         console.log(error.code)
         console.log(error.message)
@@ -173,17 +174,6 @@ const Course = () => {
 
           </Box>
         </form>
-        <div>
-          {
-            orderDetail.length === 0 ?
-              orderDetail.map((item) => {
-                <ul>
-                  <li>item.Name</li>
-                </ul>
-              }) : null
-          }
-
-        </div>
       </div>
     </>
 
