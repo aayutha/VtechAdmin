@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import List from '@mui/material/List';
@@ -14,6 +14,8 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Grid from '@mui/material/Grid';
 import FolderIcon from '@mui/icons-material/Folder';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { db } from "../../firebase";
+import { addDoc, collection } from "firebase/firestore";
 
 function generate(element) {
   return [0, 1, 2].map((value) =>
@@ -28,84 +30,109 @@ const Demo = styled('div')(({ theme }) => ({
 const Course = () => {
   const [dense, setDense] = React.useState(false);
   const [secondary, setSecondary] = React.useState(false);
+  const [courseName, setcourseName] = useState("")
+  const [Cdescription, setCdescription] = useState("")
+  const [CImageUrl, setCImageUrl] = useState("")
+  const SubmitFeedback = async () => {
 
+    console.log(courseName)
+    console.log(Cdescription)
+    console.log(CImageUrl)
+    try {
+      await addDoc(collection(db, "Courses"), {
+        Name: courseName,
+        Description: Cdescription,
+        ImageUrl: CImageUrl
+      }).then((docRef) => {
+        console.log(docRef.id)
+      }).catch((error) => {
+        console.log(error.code)
+        console.log(error.message)
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
+  }
   return (
-    <div>
-      <form>
-        <Box
-          display="flex"
-          flexDirection={"column"}
-          maxWidth={400}
-          alignItems={"center"}
-          justifyContent={"center"}
-          margin="auto"
-          marginTop={5}
-          padding={3}
-          borderRadius={5}
-          boxShadow={"5px 5px 10px #ccc"}
-          sx={{
-            ":hover": {
-              boxShadow: "10px 10px 20px #ccc",
-            },
-          }}
-        >
-          <Typography variant="h5" padding={3} textAlign="center">Course</Typography>
-
-          <TextField sx={{ width: 300 }} margin="normal" type={'text'} variant="outlined" placeholder="Course Name" />
-          <TextField sx={{ width: 300 }} margin="normal" type={'text'} variant="outlined" placeholder="Course Detail" />
-          <TextField sx={{ width: 300 }} margin="normal" type={'text'} variant="outlined" placeholder="Course Price" />
-{/* mui list code */}
-
-
-      <Grid container spacing={2} alignContent="center">
-      
-        <Grid item xs={12} md={6}  >
-          <Typography sx={{ mt: 4, mb: 2 ,}} variant="h6" component="div" marginLeft={7}>
-            Course List
-          </Typography>
-          <Demo sx={{ m: 1}}>
-            <List dense={dense} >
-              {generate(
-                <ListItem sx={{ m: 3,width: 300 }}
-                  secondaryAction={
-                    <IconButton edge="end" aria-label="delete">
-                      <DeleteIcon />
-                    </IconButton>
-                  }
-                >
-                  <ListItemAvatar   >
-                    <Avatar>
-                      <FolderIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary="Digital-Marketing"
-                    secondary={secondary ? 'Secondary text' : null}
-                  />
-                </ListItem>,
-              )}
-            </List>
-          </Demo>
-        </Grid>
-      </Grid>
-
-{/* mui list code */}
-         
-
-          <Button
-            sx={{ marginTop: 3, borderRadius: 3, width: 220 }}
-            variant="contained"
-            color="warning"
-
-          >Add</Button>
-
-
-        </Box>
-      </form>
+    <>
       <div>
+        <form>
+          <Box
+            display="flex"
+            flexDirection={"column"}
+            maxWidth={400}
+            alignItems={"center"}
+            justifyContent={"center"}
+            margin="auto"
+            marginTop={5}
+            padding={3}
+            borderRadius={5}
+            boxShadow={"5px 5px 10px #ccc"}
+            sx={{
+              ":hover": {
+                boxShadow: "10px 10px 20px #ccc",
+              },
+            }}
+          >
 
+            <Typography variant="h5" padding={3} textAlign="center">Course</Typography>
+
+            <TextField sx={{ width: 300 }} margin="normal" type={'text'} variant="outlined" placeholder="Course Name" onChange={(event) => setcourseName(event.target.value)} />
+            <TextField sx={{ width: 300 }} margin="normal" type={'text'} variant="outlined" placeholder="Course Detail" onChange={(event) => setCdescription(event.target.value)} />
+            <TextField sx={{ width: 300 }} margin="normal" type={'text'} variant="outlined" placeholder="Course ImageUrl" onChange={(event) => setCImageUrl(event.target.value)} />
+            {/* mui list code */}
+
+            <Button
+              sx={{ marginTop: 3, borderRadius: 3, width: 220 }}
+              variant="contained"
+              color="warning"
+              onClick={SubmitFeedback}
+            >Add</Button>
+            <Grid container spacing={2} alignContent="center">
+
+              <Grid item xs={12} md={6}  >
+                <Typography sx={{ mt: 4, mb: 2, }} variant="h6" component="div" marginLeft={7}>
+                  Course List
+                </Typography>
+                <Demo sx={{ m: 1 }}>
+                  <List dense={dense} >
+                    {generate(
+                      <ListItem sx={{ m: 3, width: 300 }}
+                        secondaryAction={
+                          <IconButton edge="end" aria-label="delete">
+                            <DeleteIcon />
+                          </IconButton>
+                        }
+                      >
+                        <ListItemAvatar   >
+                          <Avatar>
+                            <FolderIcon />
+                          </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary="Digital-Marketing"
+                          secondary={secondary ? 'Secondary text' : null}
+                        />
+                      </ListItem>,
+                    )}
+                  </List>
+                </Demo>
+              </Grid>
+            </Grid>
+
+            {/* mui list code */}
+
+
+
+          </Box>
+        </form>
+        <div>
+
+        </div>
       </div>
-    </div>
+    </>
+
   );
 };
 
