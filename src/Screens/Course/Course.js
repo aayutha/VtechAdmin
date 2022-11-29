@@ -15,7 +15,7 @@ import Grid from '@mui/material/Grid';
 import FolderIcon from '@mui/icons-material/Folder';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { db } from "../../firebase";
-import { addDoc, collection, getDocs, getDoc } from "firebase/firestore";
+import { addDoc, collection, getDocs, getDoc,deleteDoc,doc } from "firebase/firestore";
 import { async } from "@firebase/util";
 
 function generate(element) {
@@ -35,6 +35,7 @@ const Course = () => {
   const [Cdescription, setCdescription] = useState("")
   const [CImageUrl, setCImageUrl] = useState("")
   const [orderDetail, setOrderDetail] = useState([]);
+  
 
   useEffect(() => {
     getOrderData();
@@ -46,13 +47,25 @@ const Course = () => {
       const docSnap = await getDocs(docRef);
       docSnap.forEach((item)=>{
         resultArray.push({ id: item.id, ...item.data() });
+        console.log("hi");
       });
       console.log(resultArray);
       setOrderDetail(resultArray);
+      
     } catch (error) {
       console.log(error)
     }
   }
+
+const Deletecourse = async (id) =>{
+  
+
+  const docref = collection(db, "Courses",id);
+  await deleteDoc(docref);
+  console.log("delete successfully")
+  console.log(id)
+}
+
   const SubmitFeedback = async () => {
 
     console.log(courseName)
@@ -125,7 +138,7 @@ const Course = () => {
                           sx={{ m: 3, width: 300 }}
                           secondaryAction={
                             <IconButton edge="end" aria-label="delete">
-                              <DeleteIcon />
+                              <DeleteIcon onClick={()=> Deletecourse(item.id)} />
                             </IconButton>
                           }
                         >
