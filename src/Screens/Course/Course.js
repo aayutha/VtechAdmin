@@ -15,7 +15,7 @@ import Grid from '@mui/material/Grid';
 import FolderIcon from '@mui/icons-material/Folder';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { db } from "../../firebase";
-import { addDoc, collection, getDocs, getDoc,deleteDoc,doc } from "firebase/firestore";
+import { addDoc, collection, getDocs, getDoc, deleteDoc, doc } from "firebase/firestore";
 import { async } from "@firebase/util";
 
 function generate(element) {
@@ -35,7 +35,7 @@ const Course = () => {
   const [Cdescription, setCdescription] = useState("")
   const [CImageUrl, setCImageUrl] = useState("")
   const [orderDetail, setOrderDetail] = useState([]);
-  
+
 
   useEffect(() => {
     getOrderData();
@@ -45,26 +45,28 @@ const Course = () => {
     const docRef = collection(db, "Courses");
     try {
       const docSnap = await getDocs(docRef);
-      docSnap.forEach((item)=>{
+      docSnap.forEach((item) => {
         resultArray.push({ id: item.id, ...item.data() });
         console.log("hi");
       });
       console.log(resultArray);
       setOrderDetail(resultArray);
-      
+
     } catch (error) {
       console.log(error)
     }
   }
 
-const Deletecourse = async (id) =>{
-  
-
-  const docref = collection(db, "Courses",id);
-  await deleteDoc(docref);
-  console.log("delete successfully")
-  console.log(id)
-}
+  const Deletecourse = async (item) => {
+    console.log(item.id)
+    try {
+      const docref = doc(db, "Courses", item.id);
+      await deleteDoc(docref);
+      console.log("delete successfully")
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const SubmitFeedback = async () => {
 
@@ -131,35 +133,35 @@ const Deletecourse = async (id) =>{
                 <Demo sx={{ m: 1 }}>
                   <List dense={dense} >
                     {
-                      orderDetail.length===0?null:
-                      orderDetail.map((item,index)=>(
-                        <ListItem 
-                          key={index}
-                          sx={{ m: 3, width: 300 }}
-                          secondaryAction={
-                            <IconButton edge="end" aria-label="delete">
-                              <DeleteIcon onClick={()=> Deletecourse(item.id)} />
-                            </IconButton>
-                          }
-                        >
-                          <ListItemAvatar   >
-                            <Avatar>
-                              <FolderIcon />
-                            </Avatar>
-                          </ListItemAvatar>
-                         <div style={{display:'flex',flexDirection:'column'}}>
-                          <ListItemText
-                            primary={item.Name}
-                            secondary={secondary ? 'Secondary text' : null}
-                            />
-                            <ListItemText
+                      orderDetail.length === 0 ? null :
+                        orderDetail.map((item, index) => (
+                          <ListItem
+                            key={index}
+                            sx={{ m: 3, width: 300 }}
+                            secondaryAction={
+                              <IconButton edge="end" aria-label="delete">
+                                <DeleteIcon onClick={() => Deletecourse(item)} />
+                              </IconButton>
+                            }
+                          >
+                            <ListItemAvatar   >
+                              <Avatar>
+                                <FolderIcon />
+                              </Avatar>
+                            </ListItemAvatar>
+                            <div style={{ display: 'flex', flexDirection: 'column' }}>
+                              <ListItemText
+                                primary={item.Name}
+                                secondary={secondary ? 'Secondary text' : null}
+                              />
+                              <ListItemText
 
-                            primary={item.Description}
-                            secondary={secondary ? 'Secondary text' : null}
-                            />
-                         </div>
-                        </ListItem> 
-                      ))
+                                primary={item.Description}
+                                secondary={secondary ? 'Secondary text' : null}
+                              />
+                            </div>
+                          </ListItem>
+                        ))
                     }
                   </List>
                 </Demo>
