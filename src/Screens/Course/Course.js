@@ -21,14 +21,14 @@ const columns = [
   { field: 'id', headerName: 'ID', width: 70 },
   { field: 'Name', headerName: 'Name', width: 130 },
   { field: 'Description', headerName: 'Description', width: 130 },
- 
- 
+
+
 ];
 
 const rows = [
-  { id: 1, Description: 'Snow', Name: 'Jon'},
+  { id: 1, Description: 'Snow', Name: 'Jon' },
   { id: 2, Description: 'Lannister', Name: 'Cersei' },
- 
+
 ];
 
 function generate(element) {
@@ -189,16 +189,16 @@ const Course = () => {
 
         </form>
       </div>
-      <div style={{ height: 305, width: '30%',marginLeft:"35%",marginTop:"5px",borderRadius:"35px",}}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[5]}
-        checkboxSelection
-        style={{borderRadius:"35px",BorderColor:"black"}}
-      />
-    </div>
+      <div style={{ height: 305, width: '30%', marginLeft: "35%", marginTop: "5px", borderRadius: "35px", }}>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          pageSize={5}
+          rowsPerPageOptions={[5]}
+          checkboxSelection
+          style={{ borderRadius: "35px", BorderColor: "black" }}
+        />
+      </div>
     </>
 
   );
