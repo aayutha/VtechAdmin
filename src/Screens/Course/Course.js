@@ -20,14 +20,14 @@ import { BorderColor } from "@mui/icons-material";
 const columns = [
   { field: 'id', headerName: 'ID', width: 70 },
   { field: 'Name', headerName: 'Name', width: 130 },
-  { field: 'Description', headerName: 'Description', width: 130 },
+  { field: 'Description', headerName: 'Description', width: 180 },
 
 
 ];
 
 const rows = [
-  { id: 1, Description: 'Snow', Name: 'Jon' },
-  { id: 2, Description: 'Lannister', Name: 'Cersei' },
+  // { id: 1, Description: 'Snow', Name: 'Jon' },
+  // { id: 2, Description: 'Lannister', Name: 'Cersei' },
 
 ];
 
@@ -137,7 +137,7 @@ const Course = () => {
               color="warning"
               onClick={SubmitFeedback}
             >Add</Button>
-            <Grid container spacing={2} alignContent="center">
+            {/* <Grid container spacing={2} alignContent="center">
 
               <Grid item xs={12} md={6}  >
                 <Typography sx={{ mt: 4, mb: 2, }} variant="h6" component="div" marginLeft={7}>
@@ -179,7 +179,7 @@ const Course = () => {
                   </List>
                 </Demo>
               </Grid>
-            </Grid>
+            </Grid> */}
 
             {/* mui list code */}
 
@@ -189,15 +189,26 @@ const Course = () => {
 
         </form>
       </div>
-      <div style={{ height: 305, width: '30%', marginLeft: "35%", marginTop: "5px", borderRadius: "35px", }}>
+      <div style={{ height: 305, margin: "auto", width: "auto", marginLeft: "20%", marginTop: "5%", borderRadius: "35px", }}>
+
+
         <DataGrid
-          rows={rows}
-          columns={columns}
+          rows={
+            orderDetail.map((item, index) => (
+              { id: item.id, Description: item.Description, Name: item.Name }
+            ))}
+          columns={[
+            { field: 'id', headerName: 'ID', width: 260 },
+            { field: 'Name', headerName: 'Name', width: 200 },
+            { field: 'Description', headerName: 'Description', width: 300 },
+          ]}
           pageSize={5}
           rowsPerPageOptions={[5]}
           checkboxSelection
-          style={{ borderRadius: "35px", BorderColor: "black" }}
+          style={{ margin: "auto", width: "auto", borderRadius: "5px", BorderColor: "black", width: "60%", border: "1px solid black" }}
         />
+
+
       </div>
     </>
 
