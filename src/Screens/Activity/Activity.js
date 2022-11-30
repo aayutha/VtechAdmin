@@ -1,10 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { db } from "../../firebase";
 import { addDoc, collection, getDocs, getDoc, deleteDoc, doc } from "firebase/firestore";
-import Checkbox from "@material-ui/core/Checkbox";
-
+import { styled } from '@mui/material/styles';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemText from '@mui/material/ListItemText';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
+import Grid from '@mui/material/Grid';
+import FolderIcon from '@mui/icons-material/Folder';
+import DeleteIcon from '@mui/icons-material/Delete';
 const Activity = () => {
+  const [dense, setDense] = React.useState(false);
   const [ActivityName, setActivityName] = useState('')
   const [NOQuestion, setNOQuestion] = useState(0)
   const [Question, setQuestion] = useState("")
@@ -13,10 +22,34 @@ const Activity = () => {
   const [QuesOption3, setQuesOption3] = useState("")
   const [QuesOption4, setQuesOption4] = useState("")
   const [SelectedTech] = useState([])
-
-
+  const [orderDetail, setOrderDetail] = useState([]);
   const [assignedID, setassignedID] = useState("")
+  const [secondary, setSecondary] = React.useState(false);
+
   const d = new Date("2022-03-25")
+  const Demo = styled('div')(({ theme }) => ({
+    backgroundColor: theme.palette.background.paper,
+  }));
+  useEffect(() => {
+    getOrderData();
+  }, [])
+  const getOrderData = async () => {
+    let resultArray = [];
+    const docRef = collection(db, "Quiz");
+    try {
+      const docSnap = await getDocs(docRef);
+      docSnap.forEach((item) => {
+        resultArray.push({ id: item.id, ...item.data() });
+        console.log("hi");
+      });
+      console.log(resultArray);
+      setOrderDetail(resultArray);
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const AddActivity = async () => {
     console.log(ActivityName)
     console.log(NOQuestion)
@@ -44,6 +77,17 @@ const Activity = () => {
     SelectedTech.push(QuesOption3)
     SelectedTech.push(QuesOption4)
     console.log("language array", SelectedTech)
+  }
+  const DeleteActivity = async (item) => {
+    console.log(item.id)
+    try {
+      const docref = doc(db, "Quiz", item.id);
+      await deleteDoc(docref);
+      console.log("delete successfully")
+      getOrderData();
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
@@ -98,6 +142,49 @@ const Activity = () => {
             onClick={AddActivity}
 
           >Add</Button>
+          <Grid container spacing={2} alignContent="center">
+
+            <Grid item xs={12} md={6}  >
+              <Typography sx={{ mt: 4, mb: 2, }} variant="h6" component="div" marginLeft={7}>
+                Course List
+              </Typography>
+              <Demo sx={{ m: 1 }}>
+                <List dense={dense} >
+                  {
+                    orderDetail.length === 0 ? null :
+                      orderDetail.map((item, index) => (
+                        <ListItem
+                          key={index}
+                          sx={{ m: 3, width: 300 }}
+                          secondaryAction={
+                            <IconButton edge="end" aria-label="delete">
+                              <DeleteIcon onClick={() => DeleteActivity(item)} />
+                            </IconButton>
+                          }
+                        >
+                          <ListItemAvatar   >
+                            <Avatar>
+                              <FolderIcon />
+                            </Avatar>
+                          </ListItemAvatar>
+                          <div style={{ display: 'flex', flexDirection: 'column' }}>
+                            <ListItemText
+                              primary={item.ActivityName}
+                              secondary={secondary ? 'Secondary text' : null}
+                            />
+                            <ListItemText
+
+                              primary={item.id}
+                              secondary={secondary ? 'Secondary text' : null}
+                            />
+                          </div>
+                        </ListItem>
+                      ))
+                  }
+                </List>
+              </Demo>
+            </Grid>
+          </Grid>
 
 
         </Box>

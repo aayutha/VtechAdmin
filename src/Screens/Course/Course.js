@@ -4,19 +4,14 @@ import { styled } from '@mui/material/styles';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from "@material-ui/core/Checkbox";
 import Grid from '@mui/material/Grid';
 import FolderIcon from '@mui/icons-material/Folder';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { db } from "../../firebase";
 import { addDoc, collection, getDocs, getDoc, deleteDoc, doc } from "firebase/firestore";
-import { async } from "@firebase/util";
 
 function generate(element) {
   return [0, 1, 2].map((value) =>
