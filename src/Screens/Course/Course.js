@@ -1,35 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { styled } from '@mui/material/styles';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemText from '@mui/material/ListItemText';
-import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
-import Grid from '@mui/material/Grid';
-import FolderIcon from '@mui/icons-material/Folder';
-import DeleteIcon from '@mui/icons-material/Delete';
+// import FolderIcon from '@mui/icons-material/Folder';
+// import DeleteIcon from '@mui/icons-material/Delete';
 import { db } from "../../firebase";
 import { addDoc, collection, getDocs, getDoc, deleteDoc, doc } from "firebase/firestore";
 
 
 import { DataGrid } from '@mui/x-data-grid';
 import { BorderColor } from "@mui/icons-material";
-
-const columns = [
-  { field: 'id', headerName: 'ID', width: 70 },
-  { field: 'Name', headerName: 'Name', width: 130 },
-  { field: 'Description', headerName: 'Description', width: 180 },
-
-
-];
-
-const rows = [
-  // { id: 1, Description: 'Snow', Name: 'Jon' },
-  // { id: 2, Description: 'Lannister', Name: 'Cersei' },
-
-];
 
 function generate(element) {
   return [0, 1, 2].map((value) =>
