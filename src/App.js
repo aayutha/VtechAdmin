@@ -1,4 +1,4 @@
-import React ,{useState,createContext,useEffect} from 'react';
+import React, { useState, createContext, useEffect } from 'react';
 import { Routes, Route } from "react-router-dom";
 import './App.css';
 import Signup from './Screens/SignUp/Signup';
@@ -57,8 +57,8 @@ function App() {
               </ContextData.Provider>
             }
           </div>
-        }
-       
+      }
+
     </>
   );
 }
