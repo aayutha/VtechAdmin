@@ -8,6 +8,7 @@ import Course from './Screens/Course/Course';
 import Feedback from './Screens/Feedback/Feedback';
 import Activity from './Screens/Activity/Activity';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import Card from './Screens/Card';
 export const ContextData = React.createContext();
 function App() {
   const [userUid, setUserUid] = useState(null);
@@ -57,6 +58,7 @@ function App() {
             }
           </div>
         }
+       
     </>
   );
 }

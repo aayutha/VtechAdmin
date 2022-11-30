@@ -13,6 +13,24 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { db } from "../../firebase";
 import { addDoc, collection, getDocs, getDoc, deleteDoc, doc } from "firebase/firestore";
 
+
+import { DataGrid } from '@mui/x-data-grid';
+import { BorderColor } from "@mui/icons-material";
+
+const columns = [
+  { field: 'id', headerName: 'ID', width: 70 },
+  { field: 'Name', headerName: 'Name', width: 130 },
+  { field: 'Description', headerName: 'Description', width: 130 },
+ 
+ 
+];
+
+const rows = [
+  { id: 1, Description: 'Snow', Name: 'Jon'},
+  { id: 2, Description: 'Lannister', Name: 'Cersei' },
+ 
+];
+
 function generate(element) {
   return [0, 1, 2].map((value) =>
     React.cloneElement(element, {
@@ -168,8 +186,19 @@ const Course = () => {
 
 
           </Box>
+
         </form>
       </div>
+      <div style={{ height: 305, width: '30%',marginLeft:"35%",marginTop:"5px",borderRadius:"35px",}}>
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        pageSize={5}
+        rowsPerPageOptions={[5]}
+        checkboxSelection
+        style={{borderRadius:"35px",BorderColor:"black"}}
+      />
+    </div>
     </>
 
   );
