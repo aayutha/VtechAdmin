@@ -189,7 +189,7 @@ const Course = () => {
 
         </form>
       </div>
-      <div style={{ height: 305, margin: "auto", width: "auto", marginLeft: "20%", marginTop: "5%", borderRadius: "35px", }}>
+      <div style={{ height: 305, margin: "auto", width: "auto", marginLeft: "20%", marginTop: "30px", marginBottom: "10%", borderRadius: "35px", }}>
 
 
         <DataGrid
