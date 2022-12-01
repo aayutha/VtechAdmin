@@ -1,0 +1,12 @@
+.qustion-div{
+    margin-left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 2px 2px 0.5px 0.5px rgb(193, 193, 193);
+}
+.main-questinos{
+    /* background-color: red; */
+    height: 100vh;
+    overflow: scroll;
+    padding: 10px;
+    margin: 10px;
+}

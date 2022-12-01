@@ -12,6 +12,7 @@ import IconButton from '@mui/material/IconButton';
 import Grid from '@mui/material/Grid';
 import FolderIcon from '@mui/icons-material/Folder';
 import DeleteIcon from '@mui/icons-material/Delete';
+import ActivityQuestions from './ActivityQuestions';
 const Activity = () => {
   const [dense, setDense] = React.useState(false);
   const [ActivityName, setActivityName] = useState('')
@@ -50,34 +51,6 @@ const Activity = () => {
     }
   }
 
-  const AddActivity = async () => {
-    console.log(ActivityName)
-    console.log(NOQuestion)
-    console.log(d)
-    try {
-      await addDoc(collection(db, "Quiz"), {
-        ActivityName: ActivityName,
-        NOQues: NOQuestion,
-        QuesArray: SelectedTech,
-        PostDate: d
-      }).then((docRef) => {
-        console.log(docRef.id)
-      }).catch((error) => {
-        console.log(error.code)
-        console.log(error.message)
-      });
-    } catch (error) {
-      console.log(error);
-    }
-
-  }
-  const SetOption = () => {
-    SelectedTech.push(QuesOption1)
-    SelectedTech.push(QuesOption2)
-    SelectedTech.push(QuesOption3)
-    SelectedTech.push(QuesOption4)
-    console.log("language array", SelectedTech)
-  }
   const DeleteActivity = async (item) => {
     console.log(item.id)
     try {
@@ -89,9 +62,19 @@ const Activity = () => {
       console.log(error)
     }
   }
-
+  const setnumques=(num)=>{
+    if(num.target.value>5){
+      alert("MAximum 5 questions are allow");
+      return;
+    }
+    setNOQuestion(num.target.value)
+  }
   return (
-    <div>
+    <div style={{
+      display:"flex",
+      width:"100%",
+      justifyContent: 'space-around',
+    }}>
       <form>
         <Box
           display="flex"
@@ -114,39 +97,14 @@ const Activity = () => {
 
           <TextField sx={{ width: 350 }} margin="normal" type={'text'} variant="outlined" placeholder="Activity Name" onChange={(event) => setActivityName(event.target.value)} />
 
-          <TextField InputProps={{ inputProps: { min: 1 } }} sx={{ width: 350 }} margin="normal" type={'number'} variant="outlined" placeholder="Number Of Question" onChange={(event) => setNOQuestion(event.target.value)} />
-          <TextField sx={{ width: 350 }} margin="normal" type={'text'} variant="outlined" placeholder="Enter Question" onChange={(event) => setQuestion(event.target.value)} />
-
-          <Typography >
-            <TextField style={{ marginRight: '.5rem' }} InputProps={{ sx: { height: 40 } }} sx={{ width: 160 }} margin="normal" type={'text'} variant="outlined" placeholder="Option 1" onChange={(event) => setQuesOption1(event.target.value)} />
-            <TextField style={{ marginRight: '.5rem' }} InputProps={{ sx: { height: 40 } }} sx={{ width: 160 }} margin="normal" type={'text'} variant="outlined" placeholder="Option 2" onChange={(event) => setQuesOption2(event.target.value)} />
-
-          </Typography>
-          <Typography >
-            <TextField style={{ marginRight: '.5rem' }} InputProps={{ sx: { height: 40 } }} sx={{ width: 160 }} margin="normal" type={'text'} variant="outlined" placeholder="Option 3" onChange={(event) => setQuesOption3(event.target.value)} />
-            <TextField style={{ marginRight: '.5rem' }} InputProps={{ sx: { height: 40 } }} sx={{ width: 160 }} margin="normal" type={'text'} variant="outlined" placeholder="Option 4" onChange={(event) => setQuesOption4(event.target.value)} />
-          </Typography>
-          <Button
-            sx={{ marginTop: 3, borderRadius: 1, width: 150 }}
-            variant="contained"
-            color="warning"
-            onClick={SetOption}
-
-          >SetOption</Button>
+          <TextField InputProps={{ inputProps: { min: 1 } }} sx={{ width: 350 }} margin="normal" type={'number'} variant="outlined" placeholder="Number Of Question" 
+            onChange={(event) => setnumques(event)} />
           <TextField sx={{ width: 350 }} margin="normal" type={'text'} variant="outlined" placeholder="Activity Assign to" />
-
-          <Button
-            sx={{ marginTop: 3, borderRadius: 3, width: 220 }}
-            variant="contained"
-            color="warning"
-            onClick={AddActivity}
-
-          >Add</Button>
           <Grid container spacing={2} alignContent="center">
 
             <Grid item xs={12} md={6}  >
               <Typography sx={{ mt: 4, mb: 2, }} variant="h6" component="div" marginLeft={7}>
-                Course List
+                Quiz List
               </Typography>
               <Demo sx={{ m: 1 }}>
                 <List dense={dense} >
@@ -185,10 +143,15 @@ const Activity = () => {
               </Demo>
             </Grid>
           </Grid>
-
-
         </Box>
       </form>
+      {
+        NOQuestion===0?null:
+        <ActivityQuestions
+          numofQues={NOQuestion}
+          activityName={ActivityName}
+        />
+      }
     </div>
   );
 };
