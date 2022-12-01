@@ -7,6 +7,7 @@ import { db } from "../../firebase";
 import { addDoc, collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { DataGrid } from '@mui/x-data-grid';
 const Feedback = () => {
+  let i = 1;
   const [ReviewName, setReviewName] = useState("")
   const [QuizID, setQuizID] = useState('')
   const [UserID, setUserID] = useState('')
@@ -32,16 +33,17 @@ const Feedback = () => {
     }
   }
 
-  // const Deletecourse = async (item) => {
-  //   console.log(item.id)
-  //   try {
-  //     const docref = doc(db, "UserPerformance", item.id);
-  //     await deleteDoc(docref);
-  //     console.log("delete successfully")
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
+  const Deletecourse = async (item) => {
+    console.log(item.id)
+    console.log("id")
+    try {
+      const docref = doc(db, "UserPerformance", item.id);
+      await deleteDoc(docref);
+      console.log("delete successfully")
+    } catch (error) {
+      console.log(error)
+    }
+  }
   const SubmitFeedback = async () => {
     try {
       await addDoc(collection(db, "UserPerformance"), {
@@ -148,18 +150,19 @@ const Feedback = () => {
           <DataGrid
             rows={
               orderDetail.map((item, index) => (
-                { id: item.id, Feedback: item.AdminFeedback, Name: item.ReviewerName, UserID: item.UserID }
+                { sno: i++, id: item.id, Feedback: item.AdminFeedback, Name: item.ReviewerName, UserID: item.UserID }
               ))}
             columns={[
-              { field: 'id', headerName: 'ID', width: 260 },
+              { field: 'sno', headerName: 'sno', width: 40 },
+              { field: 'id', headerName: 'ID', width: 210 },
               { field: 'Name', headerName: 'Name', width: 200 },
               { field: 'Feedback', headerName: 'Feedback', width: 300 },
-              { field: 'UserID', headerName: 'UserID', width: 70 },
+              { field: 'UserID', headerName: 'UserID', width: 150 },
             ]}
             pageSize={9}
             rowsPerPageOptions={[8]}
-            checkboxSelection
-            style={{ margin: "auto", width: "auto", borderRadius: "5px", BorderColor: "black", width: "100%", border: "1px solid black" }}
+            // checkboxSelection
+            style={{ margin: "auto", width: "auto", borderRadius: "5px", BorderColor: "black", width: "100%", border: "2px solid black", padding: "10px" }}
           />
         </div>
       </Box>  </>
