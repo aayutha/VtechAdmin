@@ -7,6 +7,7 @@ import ActivityQuestions from './ActivityQuestions';
 import { Link } from "react-router-dom";
 import Button from '@mui/material/Button';
 import './Activity.css';
+import { Height } from "@mui/icons-material";
 const Activity = () => {
   const [ActivityName, setActivityName] = useState('')
   const [NOQuestion, setNOQuestion] = useState('')
@@ -21,6 +22,7 @@ const Activity = () => {
     }
     setNOQuestion(num.target.value)
   }
+  useEffect(()=>{},[setNOQuestion])
   const uploadToFireBase=(updatedQuizFormat)=>{
     try {
         addDoc(collection(db, "Quiz"), {
@@ -83,14 +85,19 @@ const Activity = () => {
               placeholder="Number Of Question" 
               onChange={(event) => setnumques(event)} 
             />
-          <button className="buttonDivList">
             <Link
               style={{
                 textDecoration:'none',
-                color:"white"
+                color:"white",
+                height:40,
+                width:"100%",
+                backgroundColor:"orange",
+                borderRadius:5,
+                display:"flex",
+                alignItems:"center",
+                justifyContent: 'center',
               }}
               to="listactivity">Go To List</Link>
-          </button>
         </Box>
       </form>
       {
@@ -101,6 +108,8 @@ const Activity = () => {
           title="Post Quiz"
           alreadyUploadedQuiiz={null}
           message={"Created"}
+          activityName={ActivityName}
+          quizID={null}
         />
       }
     </div>

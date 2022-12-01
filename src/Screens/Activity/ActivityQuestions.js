@@ -47,8 +47,7 @@ const ActivityQuestions=(props)=>{
             console.log(questionsArray)
             setQuizQues(questionsArray)
         }
-    },[props.numofQues,setQuizQues])
-
+    },[setQuizQues,props.numofQues,props.quizID])
     const handleQuesChange=(ques,selectedIndex)=>{
         setQuizQues((question) =>
             question.map((val,index) => {

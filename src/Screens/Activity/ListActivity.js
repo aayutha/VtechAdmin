@@ -148,6 +148,7 @@ const ListActivity = () => {
           title="Update Quiz"
           alreadyUploadedQuiiz={activityQuestionsDetails}
           message={"Updated"}
+          quizID={quizID}
         />
       }
     </div>
