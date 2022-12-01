@@ -1,6 +1,4 @@
 import React,{useEffect, useState} from 'react';
-import { db } from "../../firebase";
-import { addDoc, collection, getDocs, getDoc, deleteDoc, doc } from "firebase/firestore";
 import {  TextField } from "@mui/material";
 import Button from '@mui/material/Button';
 import './Activity.css';
@@ -9,31 +7,47 @@ const ActivityQuestions=(props)=>{
 //ques arrays
     const [quizQues,setQuizQues]=useState([]);
     const [optionsArray,setOptionArray]=useState(["","","",""]);
-    const [faculty,setFaculty]=useState(null);
-    const [imageUrl,setImageUrl]=useState(null);
-    const [noOfQues,setNoOfQues]=useState(2);
     useEffect(()=>{
-        const questionsArray=[];
-        for (let i = 0; i < props.numofQues; i++) {
-            questionsArray.push({
-                correctAnswerIndex:-1,
-                question:"",
-                options:[
-                    {_id:1,answer:"",option:"A"},
-                    {_id:2,answer:"",option:"B"},
-                    {_id:3,answer:"",option:"C"},
-                    {_id:4,answer:"",option:"D"},
-                ],
-                correctOptionDropDowns:[
-                    {label: 'A', value: 'A'},
-                    {label: 'B', value: 'B'},
-                    {label: 'C', value: 'C'},
-                    {label: 'D', value: 'D'},
-                ]
-            })
+        let questionsArray=[];
+        if(props.alreadyUploadedQuiiz===null){
+            for (let i = 0; i < props.numofQues; i++) {
+                questionsArray.push({
+                    correctAnswerIndex:-1,
+                    question:"",
+                    options:[
+                        {_id:1,answer:"",option:"A"},
+                        {_id:2,answer:"",option:"B"},
+                        {_id:3,answer:"",option:"C"},
+                        {_id:4,answer:"",option:"D"},
+                    ],
+                    correctOptionDropDowns:[
+                        {label: 'A', value: 'A'},
+                        {label: 'B', value: 'B'},
+                        {label: 'C', value: 'C'},
+                        {label: 'D', value: 'D'},
+                    ]
+                })
+            }
+            setQuizQues(questionsArray);
         }
-        setQuizQues(questionsArray);
-    },[props.numofQues])
+        else{
+            for(let i=0;i<props.numofQues;i++){
+                questionsArray.push({
+                    correctAnswerIndex:props.alreadyUploadedQuiiz[i].correctAnswerIndex,
+                    question:props.alreadyUploadedQuiiz[i].question,
+                    options:props.alreadyUploadedQuiiz[i].options,
+                    correctOptionDropDowns:[
+                        {label: 'A', value: 'A'},
+                        {label: 'B', value: 'B'},
+                        {label: 'C', value: 'C'},
+                        {label: 'D', value: 'D'},
+                    ]
+                })
+            }
+            console.log(questionsArray)
+            setQuizQues(questionsArray)
+        }
+    },[props.numofQues,setQuizQues])
 
     const handleQuesChange=(ques,selectedIndex)=>{
         setQuizQues((question) =>
@@ -74,12 +88,13 @@ const ActivityQuestions=(props)=>{
             })
         );
     }
-    const uploadQuizData=()=>{
+    const uploadQuizData=async()=>{
          if(loading){
             console.log("Please Wait for Adding New Quiz");
             return ;
         }
         try {
+            setLoading(true);
             quizQues.forEach(item => {
                 if(item.question==="")
                     throw "Please Enter All The Questions";
@@ -91,9 +106,12 @@ const ActivityQuestions=(props)=>{
                 })
             });
             let updatedQuizFormat=changeQuizArrayFormat();
-            uploadToFireBase(updatedQuizFormat)
+            await props.uploadFunction(updatedQuizFormat);
+            alert(`Quiz ${props.message}`);
+            setLoading(false);
         } catch (error) {
             alert(error)
+            setLoading(false);
         }
     }
     const changeQuizArrayFormat=(updatedQuizFormat)=>{
@@ -106,25 +124,6 @@ const ActivityQuestions=(props)=>{
             });
         })
         return updatedQuizQuestionArray;
-    }
-    const uploadToFireBase=(updatedQuizFormat)=>{
-        console.log(updatedQuizFormat,props.activityName,props.numofQues)
-        try {
-            setLoading(true);
-            addDoc(collection(db, "Quiz"), {
-                ActivityName: props.activityName,
-                NOQues: props.numofQues,
-                QuesArray: updatedQuizFormat,
-            }).then((docRef) => {
-                setLoading(false);
-            }).catch((error) => {
-                console.log(error.code)
-                console.log(error.message)  
-                setLoading(false);
-            });
-        } catch (error) {
-            console.log(error);
-        }
     }
     return(
         <div className='main-questinos' >
@@ -150,6 +149,7 @@ const ActivityQuestions=(props)=>{
                                     type={'text'} 
                                     variant="outlined" 
                                     placeholder='Enter question'
+                                    value={item.question}
                                     onChange={(ques)=>handleQuesChange(ques,index)}
                                 />
                                 <div style={{display:'flex',flexDirection: 'column',alignItems:"center",width:'100%'}}>
@@ -164,6 +164,7 @@ const ActivityQuestions=(props)=>{
                                                 type={'text'} 
                                                 variant="outlined" 
                                                 placeholder={`Enter option ${optIndex+1}`} 
+                                                value={opt.answer}
                                                 onChange={(options_val)=>handleOptions(options_val,index,optIndex)}
                                             />
                                         ))
@@ -180,7 +181,7 @@ const ActivityQuestions=(props)=>{
                                     onChange={(item)=>handleCorrectOption(item.target.value,index)}>
                                     {
                                         item.correctOptionDropDowns.map((value,selectIndex)=>(
-                                            <option style={{marginTop:5}}>{value.label}</option>
+                                            <option value={value.label} style={{marginTop:5}}>{value.label}</option>
                                         ))
                                     }
                                 </select>
@@ -193,7 +194,9 @@ const ActivityQuestions=(props)=>{
                 variant="contained" 
                 sx={{width:"80%"}}
                 color="warning"
-                onClick={uploadQuizData}>Post Quiz</Button>
+                onClick={uploadQuizData}>
+                    {props.title}
+            </Button>
         </div>
     )
 }

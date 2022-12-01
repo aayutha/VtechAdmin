@@ -10,3 +10,15 @@
     padding: 10px;
     margin: 10px;
 }
+.buttonDivList{
+    height: 40px;
+    width: 350px;
+    background-color: rgb(251, 99, 28);
+    border-radius: 10;
+    border-width: 2px;
+    border-color: aliceblue;
+    font-weight: bold;
+    font-size: 15px;
+    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+    color: white;
+}

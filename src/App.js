@@ -8,9 +8,8 @@ import Course from './Screens/Course/Course';
 import Feedback from './Screens/Feedback/Feedback';
 import Activity from './Screens/Activity/Activity';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import Card from './Screens/Card';
+import ListActivity from './Screens/Activity/ListActivity';
 import Home from './Screens/MainPage';
-import ActivityQuestions from './Screens/Activity/ActivityQuestions';
 export const ContextData = React.createContext();
 function App() {
   const [userUid, setUserUid] = useState(null);
@@ -56,6 +55,7 @@ function App() {
                   <Route path="Course" element={<Course />} />
                   <Route path="FeedBack" element={<Feedback />} />
                   <Route path="Activity" element={<Activity />} />
+                  <Route path="Activity/listactivity" element={<ListActivity />} />
                 </Routes>
               </ContextData.Provider>
             }
