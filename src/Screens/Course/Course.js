@@ -1,8 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { styled } from '@mui/material/styles';
-// import FolderIcon from '@mui/icons-material/Folder';
-// import DeleteIcon from '@mui/icons-material/Delete';
+import FolderIcon from '@mui/icons-material/Folder';
+import DeleteIcon from '@mui/icons-material/Delete';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Avatar from '@mui/material/Avatar';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
 import { db } from "../../firebase";
 import { addDoc, collection, getDocs, getDoc, deleteDoc, doc } from "firebase/firestore";
 
@@ -55,6 +63,7 @@ const Course = () => {
       const docref = doc(db, "Courses", item.id);
       await deleteDoc(docref);
       console.log("delete successfully")
+      getOrderData();
     } catch (error) {
       console.log(error)
     }
@@ -83,8 +92,51 @@ const Course = () => {
   }
   return (
     <>
-      <div>
-        <form>
+      <Box display="flex"
+        flexDirection={"row"}>
+        <div style={{ width: "50%" }}>
+          <form>
+            <Box
+              display="flex"
+              flexDirection={"column"}
+              maxWidth={400}
+              alignItems={"center"}
+              justifyContent={"center"}
+              margin="auto"
+              marginTop={5}
+              padding={3}
+              borderRadius={5}
+              boxShadow={"5px 5px 10px #ccc"}
+              sx={{
+                ":hover": {
+                  boxShadow: "10px 10px 20px #ccc",
+                },
+              }}
+            >
+
+              <Typography variant="h5" padding={3} textAlign="center">Course</Typography>
+
+              <TextField sx={{ width: 300 }} margin="normal" type={'text'} variant="outlined" placeholder="Course Name" onChange={(event) => setcourseName(event.target.value)} />
+              <TextField sx={{ width: 300 }} margin="normal" type={'text'} variant="outlined" placeholder="Course Detail" onChange={(event) => setCdescription(event.target.value)} />
+              <TextField sx={{ width: 300 }} margin="normal" type={'text'} variant="outlined" placeholder="Course ImageUrl" onChange={(event) => setCImageUrl(event.target.value)} />
+              {/* mui list code */}
+
+              <Button
+                sx={{ marginTop: 3, borderRadius: 3, width: 220 }}
+                variant="contained"
+                color="warning"
+                onClick={SubmitFeedback}
+              >Add</Button>
+
+              {/* mui list code */}
+
+
+
+            </Box>
+
+          </form>
+        </div>
+        <div>
           <Box
             display="flex"
             flexDirection={"column"}
@@ -95,28 +147,16 @@ const Course = () => {
             marginTop={5}
             padding={3}
             borderRadius={5}
+            height="500px"
+            overflow="scroll"
             boxShadow={"5px 5px 10px #ccc"}
             sx={{
               ":hover": {
                 boxShadow: "10px 10px 20px #ccc",
               },
-            }}
-          >
+            }}>
 
-            <Typography variant="h5" padding={3} textAlign="center">Course</Typography>
-
-            <TextField sx={{ width: 300 }} margin="normal" type={'text'} variant="outlined" placeholder="Course Name" onChange={(event) => setcourseName(event.target.value)} />
-            <TextField sx={{ width: 300 }} margin="normal" type={'text'} variant="outlined" placeholder="Course Detail" onChange={(event) => setCdescription(event.target.value)} />
-            <TextField sx={{ width: 300 }} margin="normal" type={'text'} variant="outlined" placeholder="Course ImageUrl" onChange={(event) => setCImageUrl(event.target.value)} />
-            {/* mui list code */}
-
-            <Button
-              sx={{ marginTop: 3, borderRadius: 3, width: 220 }}
-              variant="contained"
-              color="warning"
-              onClick={SubmitFeedback}
-            >Add</Button>
-            {/* <Grid container spacing={2} alignContent="center">
+            <Grid container spacing={2} alignContent="center">
 
               <Grid item xs={12} md={6}  >
                 <Typography sx={{ mt: 4, mb: 2, }} variant="h6" component="div" marginLeft={7}>
@@ -143,7 +183,8 @@ const Course = () => {
                             </ListItemAvatar>
                             <div style={{ display: 'flex', flexDirection: 'column' }}>
                               <ListItemText
-                                primary={item.Name}
+                                // primary={item.Name}
+                                primary={<p>{item.Name}</p>}
                                 secondary={secondary ? 'Secondary text' : null}
                               />
                               <ListItemText
@@ -158,37 +199,13 @@ const Course = () => {
                   </List>
                 </Demo>
               </Grid>
-            </Grid> */}
-
-            {/* mui list code */}
-
-
-
+            </Grid>
           </Box>
 
-        </form>
-      </div>
-      <div style={{ height: 305, margin: "auto", width: "auto", marginLeft: "20%", marginTop: "30px", marginBottom: "10%", borderRadius: "35px", }}>
+        </div>
 
 
-        <DataGrid
-          rows={
-            orderDetail.map((item, index) => (
-              { id: item.id, Description: item.Description, Name: item.Name }
-            ))}
-          columns={[
-            { field: 'id', headerName: 'ID', width: 260 },
-            { field: 'Name', headerName: 'Name', width: 200 },
-            { field: 'Description', headerName: 'Description', width: 300 },
-          ]}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
-          checkboxSelection
-          style={{ margin: "auto", width: "auto", borderRadius: "5px", BorderColor: "black", width: "60%", border: "1px solid black" }}
-        />
-
-
-      </div>
+      </Box>
     </>
 
   );
