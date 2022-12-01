@@ -63,37 +63,41 @@ const Feedback = () => {
   }
   return (
     <>
-      <div>
-        <form>
-          <Box
-            display="flex"
-            flexDirection={"column"}
-            maxWidth={400}
-            alignItems={"center"}
-            justifyContent={"center"}
-            margin="auto"
-            marginTop={5}
-            padding={3}
-            borderRadius={5}
-            boxShadow={"5px 5px 10px #ccc"}
-            sx={{
-              ":hover": {
-                boxShadow: "10px 10px 20px #ccc",
-              },
-            }}
-          >
-            <Typography variant="h5" padding={3} textAlign="center">Feedback Form</Typography>
-            <TextField sx={{ width: 350 }} InputProps={{ sx: { height: 180 } }} margin="normal" type={'text'} variant="outlined" placeholder="Feedback" onChange={(event) => setFeedback(event.target.value)} />
-            <TextField sx={{ width: 350 }} margin="normal" type={'text'} variant="outlined" placeholder="Reviewer Name" onChange={(event) => setReviewName(event.target.value)} />
-            <TextField sx={{ width: 350 }} margin="normal" type={'text'} variant="outlined" placeholder="Quiz ID" onChange={(event) => setQuizID(event.target.value)} />
-            <TextField sx={{ width: 350 }} margin="normal" type={'text'} variant="outlined" placeholder="UserID" onChange={(event) => setUserID(event.target.value)} />
-            <Button
-              sx={{ marginTop: 3, borderRadius: 3, width: 220 }}
-              variant="contained"
-              color="warning"
-              onClick={SubmitFeedback}
-            >Submit</Button>
-            {/* <Grid container spacing={2} alignContent="center">
+      <Box display="flex"
+        flexDirection={"row"}>
+        <div style={{ marginLeft: "5%" }}>
+
+
+          <form>
+            <Box
+              display="flex"
+              flexDirection={"column"}
+              maxWidth={400}
+              alignItems={"center"}
+              justifyContent={"center"}
+              margin="auto"
+              marginTop={5}
+              padding={3}
+              borderRadius={5}
+              boxShadow={"5px 5px 10px #ccc"}
+              sx={{
+                ":hover": {
+                  boxShadow: "10px 10px 20px 10px #ccc",
+                },
+              }}
+            >
+              <Typography variant="h5" padding={3} textAlign="center">Feedback Form</Typography>
+              <TextField sx={{ width: 350 }} InputProps={{ sx: { height: 180 } }} margin="normal" type={'text'} variant="outlined" placeholder="Feedback" onChange={(event) => setFeedback(event.target.value)} />
+              <TextField sx={{ width: 350 }} margin="normal" type={'text'} variant="outlined" placeholder="Reviewer Name" onChange={(event) => setReviewName(event.target.value)} />
+              <TextField sx={{ width: 350 }} margin="normal" type={'text'} variant="outlined" placeholder="Quiz ID" onChange={(event) => setQuizID(event.target.value)} />
+              <TextField sx={{ width: 350 }} margin="normal" type={'text'} variant="outlined" placeholder="UserID" onChange={(event) => setUserID(event.target.value)} />
+              <Button
+                sx={{ marginTop: 3, borderRadius: 3, width: 220 }}
+                variant="contained"
+                color="warning"
+                onClick={SubmitFeedback}
+              >Submit</Button>
+              {/* <Grid container spacing={2} alignContent="center">
 
               <Grid item xs={12} md={6}  >
                 <Typography sx={{ mt: 4, mb: 2, }} variant="h6" component="div" marginLeft={7}>
@@ -136,28 +140,29 @@ const Feedback = () => {
                 </Demo>
               </Grid>
             </Grid> */}
-          </Box>
-        </form>
-      </div>
-      <div style={{ height: "305px", margin: "auto", width: "auto", marginTop: "30px", marginBottom: "10%", borderRadius: "35px", }}>
-        <h1>Feedback on assignment</h1>
-        <DataGrid
-          rows={
-            orderDetail.map((item, index) => (
-              { id: item.id, Feedback: item.AdminFeedback, Name: item.ReviewerName, UserID: item.UserID }
-            ))}
-          columns={[
-            { field: 'id', headerName: 'ID', width: 260 },
-            { field: 'Name', headerName: 'Name', width: 200 },
-            { field: 'Feedback', headerName: 'Feedback', width: 300 },
-            { field: 'UserID', headerName: 'UserID', width: 70 },
-          ]}
-          pageSize={9}
-          rowsPerPageOptions={[8]}
-          checkboxSelection
-          style={{ margin: "auto", width: "auto", borderRadius: "5px", BorderColor: "black", width: "70%", border: "1px solid black" }}
-        />
-      </div>    </>
+            </Box>
+          </form>
+        </div>
+        <div style={{ height: "500px", margin: "auto", width: "auto", marginTop: "30px", marginBottom: "10%", borderRadius: "35px", width: "60%" }}>
+          <h1>Feedback on assignment</h1>
+          <DataGrid
+            rows={
+              orderDetail.map((item, index) => (
+                { id: item.id, Feedback: item.AdminFeedback, Name: item.ReviewerName, UserID: item.UserID }
+              ))}
+            columns={[
+              { field: 'id', headerName: 'ID', width: 260 },
+              { field: 'Name', headerName: 'Name', width: 200 },
+              { field: 'Feedback', headerName: 'Feedback', width: 300 },
+              { field: 'UserID', headerName: 'UserID', width: 70 },
+            ]}
+            pageSize={9}
+            rowsPerPageOptions={[8]}
+            checkboxSelection
+            style={{ margin: "auto", width: "auto", borderRadius: "5px", BorderColor: "black", width: "100%", border: "1px solid black" }}
+          />
+        </div>
+      </Box>  </>
   );
 };
 
