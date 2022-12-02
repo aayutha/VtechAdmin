@@ -49,10 +49,11 @@ function App() {
                 getAutherUserDetails: getAutherUserDetails,
                 userEmail: userEmail,
                 setUserEmail: setUserEmail
-                
+
               }}>
                 <Routes>
                   <Route path="/" element={<Home />} />
+                  <Route path="/VTechadmin" element={<Home />} />
                   <Route path="Course" element={<Course />} />
                   <Route path="FeedBack" element={<Feedback />} />
                   <Route path="Activity" element={<Activity />} />
