@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
-import { styled } from '@mui/material/styles';
-// import FolderIcon from '@mui/icons-material/Folder';
-// import DeleteIcon from '@mui/icons-material/Delete';
 import { db } from "../../firebase";
-import { addDoc, collection, getDocs, deleteDoc, doc } from "firebase/firestore";
+import { addDoc, collection, getDocs } from "firebase/firestore";
 import { DataGrid } from '@mui/x-data-grid';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const Feedback = () => {
   let i = 1;
   const [ReviewName, setReviewName] = useState("")
@@ -32,44 +31,52 @@ const Feedback = () => {
       console.log(error)
     }
   }
-
-  const Deletecourse = async (item) => {
-    console.log(item.id)
-    console.log("id")
-    try {
-      const docref = doc(db, "UserPerformance", item.id);
-      await deleteDoc(docref);
-      console.log("delete successfully")
-    } catch (error) {
-      console.log(error)
-    }
-  }
   const SubmitFeedback = async () => {
-    try {
-      await addDoc(collection(db, "UserPerformance"), {
-        AdminFeedback: Feedback,
-        quizID: QuizID,
-        UserID: UserID,
-        ReviewerName: ReviewName
-      }).then((docRef) => {
-        console.log(docRef.id)
-        getOrderData();
-      }).catch((error) => {
-        console.log(error.code)
-        console.log(error.message)
+    if (Feedback === "" || QuizID === "" || UserID === "" || ReviewName === "") {
+      toast.warning('Please fill all the fields', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        theme: "light",
+        type: "error"
       });
-    } catch (error) {
-      console.log(error);
     }
-
+    else {
+      try {
+        await addDoc(collection(db, "UserPerformance"), {
+          AdminFeedback: Feedback,
+          quizID: QuizID,
+          UserID: UserID,
+          ReviewerName: ReviewName
+        }).then((docRef) => {
+          console.log(docRef.id)
+          toast.success('🦄 Your feedback has given to student', {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: false,
+            theme: "light",
+          });
+          getOrderData();
+        }).catch((error) => {
+          console.log(error.code)
+          console.log(error.message)
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
   }
   return (
     <>
       <Box display="flex"
         flexDirection={"row"}>
         <div style={{ marginLeft: "5%" }}>
-
-
           <form>
             <Box
               display="flex"
@@ -99,49 +106,6 @@ const Feedback = () => {
                 color="warning"
                 onClick={SubmitFeedback}
               >Submit</Button>
-              {/* <Grid container spacing={2} alignContent="center">
-
-              <Grid item xs={12} md={6}  >
-                <Typography sx={{ mt: 4, mb: 2, }} variant="h6" component="div" marginLeft={7}>
-                  Course List
-                </Typography>
-                <Demo sx={{ m: 1 }}>
-                  <List dense={dense} >
-                    {
-                      orderDetail.length === 0 ? null :
-                        orderDetail.map((item, index) => (
-                          <ListItem
-                            key={index}
-                            sx={{ m: 3, width: 300 }}
-                            secondaryAction={
-                              <IconButton edge="end" aria-label="delete">
-                                <DeleteIcon onClick={() => Deletecourse(item)} />
-                              </IconButton>
-                            }
-                          >
-                            <ListItemAvatar   >
-                              <Avatar>
-                                <FolderIcon />
-                              </Avatar>
-                            </ListItemAvatar>
-                            <div style={{ display: 'flex', flexDirection: 'column' }}>
-                              <ListItemText
-                                primary={item.ReviewerName}
-                                secondary={secondary ? 'Secondary text' : null}
-                              />
-                              <ListItemText
-
-                                primary={item.AdminFeedback}
-                                secondary={secondary ? 'Secondary text' : null}
-                              />
-                            </div>
-                          </ListItem>
-                        ))
-                    }
-                  </List>
-                </Demo>
-              </Grid>
-            </Grid> */}
             </Box>
           </form>
         </div>
@@ -161,12 +125,12 @@ const Feedback = () => {
             ]}
             pageSize={9}
             rowsPerPageOptions={[8]}
-            // checkboxSelection
-            style={{ margin: "auto", width: "auto", borderRadius: "5px", BorderColor: "black", width: "100%", border: "2px solid black", padding: "10px" }}
+            style={{ margin: "auto", borderRadius: "5px", BorderColor: "black", width: "100%", border: "2px solid black", padding: "10px" }}
           />
         </div>
-      </Box>  </>
+      </Box>
+      <ToastContainer />
+    </>
   );
 };
-
 export default Feedback;

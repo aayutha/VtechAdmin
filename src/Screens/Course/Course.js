@@ -6,31 +6,20 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import { db } from "../../firebase";
-import { addDoc, collection, getDocs, getDoc, deleteDoc, doc } from "firebase/firestore";
-
-
-import { DataGrid } from '@mui/x-data-grid';
-import { BorderColor } from "@mui/icons-material";
-
-function generate(element) {
-  return [0, 1, 2].map((value) =>
-    React.cloneElement(element, {
-      key: value,
-    }),
-  );
-}
+import { addDoc, collection, getDocs, deleteDoc, doc } from "firebase/firestore";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const Demo = styled('div')(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
 }));
 const Course = () => {
-  const [dense, setDense] = React.useState(false);
-  const [secondary, setSecondary] = React.useState(false);
+  const [dense] = React.useState(false);
+  const [secondary] = React.useState(false);
   const [courseName, setcourseName] = useState("")
   const [Cdescription, setCdescription] = useState("")
   const [CImageUrl, setCImageUrl] = useState("")
@@ -62,7 +51,15 @@ const Course = () => {
     try {
       const docref = doc(db, "Courses", item.id);
       await deleteDoc(docref);
-      console.log("delete successfully")
+      toast.success('Your Course has deleted', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        theme: "light",
+      });
       getOrderData();
     } catch (error) {
       console.log(error)
@@ -73,20 +70,54 @@ const Course = () => {
     console.log(courseName)
     console.log(Cdescription)
     console.log(CImageUrl)
-    try {
-      await addDoc(collection(db, "Courses"), {
-        Name: courseName,
-        Description: Cdescription,
-        ImageUrl: CImageUrl
-      }).then((docRef) => {
-        console.log(docRef.id)
-        getOrderData();
-      }).catch((error) => {
-        console.log(error.code)
-        console.log(error.message)
+    if (courseName === "" || Cdescription === "" || CImageUrl === "") {
+      toast.warning('Please fill all the fields', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        theme: "light",
+        type: "error"
       });
-    } catch (error) {
-      console.log(error);
+    }
+    else {
+      try {
+        await addDoc(collection(db, "Courses"), {
+          Name: courseName,
+          Description: Cdescription,
+          ImageUrl: CImageUrl
+        }).then((docRef) => {
+          console.log(docRef.id)
+
+          getOrderData();
+          toast.success('🦄 Your Course has is added', {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: false,
+            theme: "light",
+          });
+        }).catch((error) => {
+          console.log(error.code)
+          console.log(error.message)
+          toast.success('Your Course has not added', {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: false,
+            theme: "light",
+            type: "error"
+          });
+        });
+      } catch (error) {
+        console.log(error);
+      }
     }
 
   }
@@ -141,14 +172,10 @@ const Course = () => {
             display="flex"
             flexDirection={"column"}
             maxWidth={400}
-            alignItems={"center"}
-            justifyContent={"center"}
-            margin="auto"
             marginTop={5}
             padding={3}
             borderRadius={5}
             height="500px"
-            overflow="scroll"
             boxShadow={"5px 5px 10px #ccc"}
             sx={{
               ":hover": {
@@ -156,7 +183,7 @@ const Course = () => {
               },
             }}>
 
-            <Grid container spacing={2} alignContent="center">
+            <Grid container spacing={2} overflow="scroll">
 
               <Grid item xs={12} md={6}  >
                 <Typography sx={{ mt: 4, mb: 2, }} variant="h6" component="div" marginLeft={7}>
@@ -206,6 +233,8 @@ const Course = () => {
 
 
       </Box>
+      <ToastContainer />
+
     </>
 
   );
