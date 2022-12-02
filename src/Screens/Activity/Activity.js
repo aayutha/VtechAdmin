@@ -1,34 +1,57 @@
 import React, { useState, useEffect } from "react";
 import { Box,  TextField, Typography } from "@mui/material";
 import { db } from "../../firebase";
-import { addDoc, collection, } from "firebase/firestore";
-import { styled } from '@mui/material/styles';
+import { addDoc, collection,getDocs } from "firebase/firestore";
 import ActivityQuestions from './ActivityQuestions';
 import { Link } from "react-router-dom";
-import Button from '@mui/material/Button';
 import './Activity.css';
-import { Height } from "@mui/icons-material";
 const Activity = () => {
+
   const [ActivityName, setActivityName] = useState('')
   const [NOQuestion, setNOQuestion] = useState('')
+  const [courseref,setCousreref]=useState('');
+  const [orderDetail, setOrderDetail] = useState([]);
 
-  const Demo = styled('div')(({ theme }) => ({
-    backgroundColor: theme.palette.background.paper,
-  }));
+  useEffect(() => {
+    getOrderData();
+  }, [setNOQuestion])
+
+  const getOrderData = async () => {
+    let resultArray = [];
+    const docRef = collection(db, "Courses");
+    try {
+      const docSnap = await getDocs(docRef);
+      docSnap.forEach((item) => {
+        resultArray.push({ id: item.id, ...item.data()});
+      });
+      setOrderDetail(resultArray);
+    } catch (error) {
+      console.log(error)
+    }
+  }
   const setnumques=(num)=>{
     if(num.target.value>5){
-      alert("MAximum 5 questions are allow");
+      alert("Maximum 5 questions are allow");
       return;
     }
     setNOQuestion(num.target.value)
   }
-  useEffect(()=>{},[setNOQuestion])
   const uploadToFireBase=(updatedQuizFormat)=>{
     try {
+        if(ActivityName==''){
+          throw "Enter Activity Name";
+        }
+        if(NOQuestion==''){
+          throw "Enter Number of questions";
+        }
+        if(courseref==''){
+          throw "Select Course";
+        }
         addDoc(collection(db, "Quiz"), {
             ActivityName: ActivityName,
             NOQues: NOQuestion,
             QuesArray: updatedQuizFormat,
+            courseRef:courseref
         }).then((docRef) => {
            console.log("Quiz added");
         }).catch((error) => {
@@ -36,7 +59,7 @@ const Activity = () => {
             console.log(error.message)  
         });
     } catch (error) {
-        console.log(error);
+        alert(error);
     }
 }
   return (
@@ -84,20 +107,38 @@ const Activity = () => {
               variant="outlined" 
               placeholder="Number Of Question" 
               onChange={(event) => setnumques(event)} 
-            />
-            <Link
+          />
+          <select  
               style={{
-                textDecoration:'none',
-                color:"white",
-                height:40,
-                width:"100%",
-                backgroundColor:"orange",
-                borderRadius:5,
-                display:"flex",
-                alignItems:"center",
-                justifyContent: 'center',
+                  width:'100%',
+                  height:40,
+                  margin:10,
+                  textAlign:"left",
+                  borderWidth:1,
+                  borderRadius:5
               }}
-              to="listactivity">Go To List</Link>
+              onChange={(item)=>setCousreref(item.target.value)}>
+              {
+                  orderDetail.map((value)=>(
+                      <option value={value.id} style={{marginTop:5,padding:10}}>{value.Name}</option>
+                  ))
+              }
+          </select>
+          <Link
+            style={{
+              textDecoration:'none',
+              color:"white",
+              height:40,
+              width:"100%",
+              backgroundColor:"orange",
+              borderRadius:5,
+              display:"flex",
+              alignItems:"center",
+              justifyContent: 'center',
+            }}
+            to="listactivity">
+              Go To List
+            </Link>
         </Box>
       </form>
       {

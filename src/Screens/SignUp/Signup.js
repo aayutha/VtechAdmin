@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebase";
+import { auth,db } from "../../firebase";
+import { addDoc, collection, } from "firebase/firestore";
 const Signup = () => {
   const [email, setemail] = useState('')
   const [password, setpassword] = useState('');
@@ -9,7 +10,16 @@ const Signup = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        console.log(user)
+        console.log(user.id)
+        addDoc(collection(db, "UserCollection",user.uid), {
+          admin:true,
+          email: email,
+        }).then((docRef) => {
+          console.log("user added");
+        }).catch((error) => {
+            console.log(error.code)
+            console.log(error.message)  
+        });
       })
       .catch((error) => {
         switch (error.code) {
