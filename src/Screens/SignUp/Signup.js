@@ -3,6 +3,7 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth,db } from "../../firebase";
 import { addDoc, collection, } from "firebase/firestore";
+import { Link } from "react-router-dom";
 const Signup = () => {
   const [email, setemail] = useState('')
   const [password, setpassword] = useState('');
@@ -52,19 +53,29 @@ const Signup = () => {
           }}
         >
           <Typography variant="h5" padding={3} textAlign="center">Sign Up</Typography>
-
-
           <TextField margin="normal" type={'email'} variant="outlined" placeholder="Email" onChange={(event) => setemail(event.target.value)} />
           <TextField margin="normal" type={'password'} variant="outlined" placeholder="Password" onChange={(event) => setpassword(event.target.value)} />
-
           <Button
-            sx={{ marginTop: 3, borderRadius: 3, width: "57%" }}
+            sx={{ marginTop: 3, borderRadius: 1, width: "57%",backgroundColor:"orange", }}
             variant="contained"
-            color="warning"
             onClick={createNewUser}
           >Sign Up</Button>
-
-
+          <Link
+            style={{
+              textDecoration:'none',
+              color:"white",
+              height:40,
+              width:"57%",
+              backgroundColor:"orange",
+              borderRadius:3,
+              display:"flex",
+              alignItems:"center",
+              justifyContent: 'center',
+              marginTop: 10,
+            }}
+            to="/">
+              Login
+            </Link>
         </Box>
       </form>
     </div>

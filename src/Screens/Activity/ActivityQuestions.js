@@ -2,6 +2,8 @@ import React,{useEffect, useState} from 'react';
 import {  TextField } from "@mui/material";
 import Button from '@mui/material/Button';
 import './Activity.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const ActivityQuestions=(props)=>{
     const [loading, setLoading] = useState(false);
 //ques arrays
@@ -25,7 +27,8 @@ const ActivityQuestions=(props)=>{
                         {label: 'C', value: 'C'},
                         {label: 'D', value: 'D'},
                     ],
-                    youTubevideoLink:""
+                    youTubevideoLink:"",
+                    selectedOption:""
                 })
             }
             setQuizQues(questionsArray);
@@ -43,7 +46,8 @@ const ActivityQuestions=(props)=>{
                     question:props.alreadyUploadedQuiiz[i].question,
                     options:props.alreadyUploadedQuiiz[i].options,
                     correctOptionDropDowns:drowDownOption,
-                    youTubevideoLink:props.alreadyUploadedQuiiz[i].youTubevideoLink
+                    youTubevideoLink:props.alreadyUploadedQuiiz[i].youTubevideoLink,
+                    selectedOption:""
                 })
             }
             setQuizQues(questionsArray)
@@ -106,13 +110,46 @@ const ActivityQuestions=(props)=>{
         try {
             setLoading(true);
             quizQues.forEach(item => {
-                if(item.question==="")
-                    throw "Please Enter All The Questions";
-                if(item.correctAnswerIndex===-1)
-                    throw "Please select correct options for question";
+                if(item.question===""){
+                    toast.warning('Please Enter All The Questions', {
+                        position: "top-center",
+                        autoClose: 5000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: false,
+                        theme: "light",
+                        type: "error"
+                      });
+                      return ;
+                }
+                if(item.correctAnswerIndex===-1){
+                    toast.warning('Please select correct options for question', {
+                        position: "top-center",
+                        autoClose: 5000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: false,
+                        theme: "light",
+                        type: "error"
+                      });
+                      return ;
+                }
                 item.options.forEach((optVal)=>{
-                    if(optVal==="")
-                        throw "Please Enter Options";
+                    if(optVal===""){
+                        toast.warning('Please Enter Options', {
+                            position: "top-center",
+                            autoClose: 5000,
+                            hideProgressBar: true,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: false,
+                            theme: "light",
+                            type: "error"
+                          });
+                          return ;
+                    }
                 })
             });
             let updatedQuizFormat=changeQuizArrayFormat();
@@ -130,7 +167,8 @@ const ActivityQuestions=(props)=>{
                 correctAnswerIndex:item.correctAnswerIndex,
                 options:item.options,
                 question:item.question,
-                youTubevideoLink:item.youTubevideoLink
+                youTubevideoLink:item.youTubevideoLink,
+                selectedOption:""
             });
         })
         return updatedQuizQuestionArray;

@@ -13,6 +13,8 @@ import Grid from '@mui/material/Grid';
 import FolderIcon from '@mui/icons-material/Folder';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ActivityQuestions from './ActivityQuestions';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const ListActivity = () => {
     const [dense, setDense] = React.useState(false);
     const [quizID,setQuizId]=useState('');
@@ -47,9 +49,28 @@ const ListActivity = () => {
       const docref = doc(db, "Quiz", item.id);
       await deleteDoc(docref);
       console.log("delete successfully")
+      toast.success('🦄 Your Activity has is Deleted Successfull', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        theme: "light",
+      });
       getOrderData();
     } catch (error) {
       console.log(error)
+      toast.success('Your Activity has not Delete', {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        theme: "light",
+        type: "error"
+      });
     }
   }
   const setActivtiyData=(activityData)=>{
@@ -64,10 +85,28 @@ const ListActivity = () => {
             QuesArray:newQuizData
         })
         .then(()=>{
-          alert("Updated")
+          toast.success('🦄 Your Activity has is added', {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: false,
+            theme: "light",
+          });
         })
         .catch((e)=>{
           console.log(e);
+          toast.success('Your Activity has not added', {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: false,
+            theme: "light",
+            type: "error"
+          });
         })
     } catch (error) {
         console.log(error)
@@ -156,6 +195,7 @@ const ListActivity = () => {
           quizID={quizID}
         />
       }
+      <ToastContainer />
     </div>
   );
 };

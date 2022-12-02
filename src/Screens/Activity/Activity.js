@@ -5,6 +5,8 @@ import { addDoc, collection,getDocs } from "firebase/firestore";
 import ActivityQuestions from './ActivityQuestions';
 import { Link } from "react-router-dom";
 import './Activity.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const Activity = () => {
 
   const [ActivityName, setActivityName] = useState('')
@@ -38,14 +40,18 @@ const Activity = () => {
   }
   const uploadToFireBase=(updatedQuizFormat)=>{
     try {
-        if(ActivityName==''){
-          throw "Enter Activity Name";
-        }
-        if(NOQuestion==''){
-          throw "Enter Number of questions";
-        }
-        if(courseref==''){
-          throw "Select Course";
+        if(ActivityName=='' || NOQuestion=='' || courseref==''){
+          toast.warning('Please fill all the fields', {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: false,
+            theme: "light",
+            type: "error"
+          });
+          return ;
         }
         addDoc(collection(db, "Quiz"), {
             ActivityName: ActivityName,
@@ -53,10 +59,28 @@ const Activity = () => {
             QuesArray: updatedQuizFormat,
             courseRef:courseref
         }).then((docRef) => {
-           console.log("Quiz added");
+           toast.success('🦄 Your Course has is added', {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: false,
+            theme: "light",
+          });
         }).catch((error) => {
             console.log(error.code)
             console.log(error.message)  
+            toast.success('Your Course has not added', {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: false,
+              theme: "light",
+              type: "error"
+            });
         });
     } catch (error) {
         alert(error);
@@ -153,6 +177,7 @@ const Activity = () => {
             quizID={null}
           />
       }
+    <ToastContainer />
     </div>
   );
 };

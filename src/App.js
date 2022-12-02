@@ -10,7 +10,7 @@ import Activity from './Screens/Activity/Activity';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import ListActivity from './Screens/Activity/ListActivity';
 import Home from './Screens/MainPage';
-export const ContextData = React.createContext();
+export const ContextData = createContext();
 function App() {
   const [userUid, setUserUid] = useState(null);
   const [userEmail, setUserEmail] = useState(null);
@@ -37,6 +37,7 @@ function App() {
         !userUid ?
           <Routes>
             <Route path="/" element={<Login />} />
+            <Route path="/VTechadmin" element={<Login />} />
             <Route path="/sign" element={<Signup />} />
             <Route path="/ForgotPassword" element={<Forgotpass />} />
           </Routes> :
@@ -45,13 +46,13 @@ function App() {
               userUid &&
               <ContextData.Provider value={{
                 userUid: userUid,
-                setUserUid: setUserUid,
+                getAutherUserDetails: getAutherUserDetails,
                 userEmail: userEmail,
                 setUserEmail: setUserEmail
-
+                
               }}>
                 <Routes>
-                  <Route path="/VtechAdmin" element={<Home />} />
+                  <Route path="/" element={<Home />} />
                   <Route path="Course" element={<Course />} />
                   <Route path="FeedBack" element={<Feedback />} />
                   <Route path="Activity" element={<Activity />} />

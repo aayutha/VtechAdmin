@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase";
+import { Link } from "react-router-dom";
 const Login = () => {
   const [email, setemail] = useState('')
   const [password, setpassword] = useState('');
@@ -9,8 +10,7 @@ const Login = () => {
     console.log("use")
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        const user = userCredential.user;
-        console.log(user)
+        // const user = userCredential.user;
       })
       .catch((error) => {
         switch (error.code) {
@@ -52,13 +52,27 @@ const Login = () => {
           <TextField margin="normal" type={'password'} variant="outlined" placeholder="Password" onChange={(event) => setpassword(event.target.value)} />
 
           <Button
-            sx={{ marginTop: 3, borderRadius: 3, width: "57%" }}
+            sx={{ marginTop: 3, borderRadius: 1, width: "57%" ,backgroundColor:"orange",}}
             variant="contained"
             color="warning"
             onClick={newUser}
           >Login</Button>
-
-
+          <Link
+            style={{
+              textDecoration:'none',
+              color:"white",
+              height:40,
+              width:"57%",
+              backgroundColor:"orange",
+              borderRadius:3,
+              display:"flex",
+              alignItems:"center",
+              justifyContent: 'center',
+              marginTop: 10,
+            }}
+            to="sign">
+              Create Account
+            </Link>
         </Box>
       </form>
     </div>

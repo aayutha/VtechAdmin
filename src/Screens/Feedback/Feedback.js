@@ -12,6 +12,7 @@ const Feedback = () => {
   const [UserID, setUserID] = useState('')
   const [Feedback, setFeedback] = useState("")
   const [orderDetail, setOrderDetail] = useState([]);
+  const [selectedActivity,selctedActivityForFeedback]=useState([]);
   useEffect(() => {
     getOrderData();
   }, [])
@@ -22,9 +23,7 @@ const Feedback = () => {
       const docSnap = await getDocs(docRef);
       docSnap.forEach((item) => {
         resultArray.push({ id: item.id, ...item.data() });
-        console.log("hi");
       });
-      console.log(resultArray);
       setOrderDetail(resultArray);
 
     } catch (error) {
@@ -72,6 +71,14 @@ const Feedback = () => {
       }
     }
   }
+  const filterSelectedData=(selectedID)=>{
+    const resultedActivity=orderDetail.filter((item)=>{
+      return item.id===selectedID.id
+    })
+    selctedActivityForFeedback(resultedActivity[0].QuesArray);
+    setQuizID(resultedActivity[0].UserID)
+    setUserID(resultedActivity[0].quizID)
+  }
   return (
     <>
       <Box display="flex"
@@ -96,10 +103,10 @@ const Feedback = () => {
               }}
             >
               <Typography variant="h5" padding={3} textAlign="center">Feedback Form</Typography>
-              <TextField sx={{ width: 350 }} InputProps={{ sx: { height: 180 } }} margin="normal" type={'text'} variant="outlined" placeholder="Feedback" onChange={(event) => setFeedback(event.target.value)} />
+              <TextField sx={{ width: 350 }} margin="normal" type={'text'} variant="outlined" placeholder="Quiz ID" value={QuizID} />
+              <TextField sx={{ width: 350 }} margin="normal" type={'text'} variant="outlined" placeholder="UserID" value={UserID} />
               <TextField sx={{ width: 350 }} margin="normal" type={'text'} variant="outlined" placeholder="Reviewer Name" onChange={(event) => setReviewName(event.target.value)} />
-              <TextField sx={{ width: 350 }} margin="normal" type={'text'} variant="outlined" placeholder="Quiz ID" onChange={(event) => setQuizID(event.target.value)} />
-              <TextField sx={{ width: 350 }} margin="normal" type={'text'} variant="outlined" placeholder="UserID" onChange={(event) => setUserID(event.target.value)} />
+              <TextField sx={{ width: 350 }} InputProps={{ sx: { height: 180 } }} margin="normal" type={'text'} variant="outlined" placeholder="Feedback" onChange={(event) => setFeedback(event.target.value)} />
               <Button
                 sx={{ marginTop: 3, borderRadius: 3, width: 220 }}
                 variant="contained"
@@ -112,16 +119,17 @@ const Feedback = () => {
         <div style={{ height: "500px", margin: "auto", width: "auto", marginTop: "30px", marginBottom: "10%", borderRadius: "35px", width: "60%" }}>
           <h1>Feedback on assignment</h1>
           <DataGrid
+            onRowClick={(params)=>filterSelectedData(params)}
             rows={
               orderDetail.map((item, index) => (
-                { sno: i++, id: item.id, Feedback: item.AdminFeedback, Name: item.ReviewerName, UserID: item.UserID }
+                { sno: i++, id: item.id, Feedback: item.AdminFeedback, Name: item.ReviewerName,status:item.status }
               ))}
             columns={[
               { field: 'sno', headerName: 'sno', width: 40 },
               { field: 'id', headerName: 'ID', width: 210 },
               { field: 'Name', headerName: 'Name', width: 200 },
               { field: 'Feedback', headerName: 'Feedback', width: 300 },
-              { field: 'UserID', headerName: 'UserID', width: 150 },
+              { field: 'status', headerName: 'status', width: 150 },
             ]}
             pageSize={9}
             rowsPerPageOptions={[8]}
@@ -130,6 +138,42 @@ const Feedback = () => {
         </div>
       </Box>
       <ToastContainer />
+      {
+        selectedActivity.length===0?null:
+        selectedActivity.map((item,index)=>(
+          <div>
+            <div style={{
+                width:500,
+                display:"flex",
+                flexDirection: "column",
+                alignItems:"center",
+                marginTop: 10,
+                marginBottom:10,
+            }} className="qustion-div">
+                <div style={{width:'80%'}}>
+                    <h3 style={{fontWeight:"bold",textAlign:"left",marginLeft:10}}>Question {index+1}</h3>
+                    <h4 style={{fontWeight:"bold",textAlign:"left",marginLeft:25}}>{item.question}</h4>
+                </div>
+                <div style={{width:'80%',}}>
+                    <h3 style={{fontWeight:"bold",textAlign:"left",marginLeft:10}}>Options</h3>
+                    {
+                      item.options.map((val,index)=>(
+                        <h4 style={{fontWeight:"bold",textAlign:"left",marginLeft:25}}>{val.answer}</h4>
+                      ))
+                    }
+                </div>
+                <div style={{width:'90%',display:"flex",justifyContent: 'space-between',}}>
+                    <h4 style={{fontWeight:"bold",textAlign:"left",}}>
+                      Correct Answer {item.correctAnswerIndex}
+                    </h4>
+                    <h4 style={{fontWeight:"bold",textAlign:"left",}}>
+                      Selected option By User {item.selectedOption}
+                    </h4> 
+                </div>
+              </div>
+            </div>
+        ))
+      }
     </>
   );
 };
