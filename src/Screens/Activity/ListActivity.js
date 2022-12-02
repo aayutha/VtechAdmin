@@ -19,8 +19,7 @@ const ListActivity = () => {
     const [NOQuestion, setNOQuestion] = useState(0)
     const [orderDetail, setOrderDetail] = useState([]);
     const [secondary, setSecondary] = React.useState(false);
-    const [activityQuestionsDetails,setActivitydetails]=useState([]);   
-    const d = new Date("2022-03-25")
+    const [activityQuestionsDetails,setActivitydetails]=useState([]);
     const Demo = styled('div')(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
   }));
@@ -61,9 +60,15 @@ const ListActivity = () => {
   const updateActivityData=async(newQuizData)=>{
     try {
         const quizRef = doc(db, "Quiz", quizID);
-        await updateDoc(quizRef, {
+        updateDoc(quizRef, {
             QuesArray:newQuizData
-        });
+        })
+        .then(()=>{
+          alert("Updated")
+        })
+        .catch((e)=>{
+          console.log(e);
+        })
     } catch (error) {
         console.log(error)
     }

@@ -6,7 +6,6 @@ const ActivityQuestions=(props)=>{
     const [loading, setLoading] = useState(false);
 //ques arrays
     const [quizQues,setQuizQues]=useState([]);
-    const [optionsArray,setOptionArray]=useState(["","","",""]);
     useEffect(()=>{
         let questionsArray=[];
         if(props.alreadyUploadedQuiiz===null){
@@ -25,29 +24,31 @@ const ActivityQuestions=(props)=>{
                         {label: 'B', value: 'B'},
                         {label: 'C', value: 'C'},
                         {label: 'D', value: 'D'},
-                    ]
+                    ],
+                    youTubevideoLink:""
                 })
             }
             setQuizQues(questionsArray);
         }
         else{
             for(let i=0;i<props.numofQues;i++){
+                let drowDownOption=[];
+                props.alreadyUploadedQuiiz[i].options.forEach((item)=>{
+                    drowDownOption.push(
+                        {label: item.answer, value: item.answer}
+                    )
+                });
                 questionsArray.push({
                     correctAnswerIndex:props.alreadyUploadedQuiiz[i].correctAnswerIndex,
                     question:props.alreadyUploadedQuiiz[i].question,
                     options:props.alreadyUploadedQuiiz[i].options,
-                    correctOptionDropDowns:[
-                        {label: 'A', value: 'A'},
-                        {label: 'B', value: 'B'},
-                        {label: 'C', value: 'C'},
-                        {label: 'D', value: 'D'},
-                    ]
+                    correctOptionDropDowns:drowDownOption,
+                    youTubevideoLink:props.alreadyUploadedQuiiz[i].youTubevideoLink
                 })
             }
-            console.log(questionsArray)
             setQuizQues(questionsArray)
         }
-    },[setQuizQues,props.numofQues,props.quizID])
+    },[props.numofQues,props.quizID])
     const handleQuesChange=(ques,selectedIndex)=>{
         setQuizQues((question) =>
             question.map((val,index) => {
@@ -87,6 +88,16 @@ const ActivityQuestions=(props)=>{
             })
         );
     }
+    const handlevideoLinkChange=(item,selectedIndex)=>{
+        setQuizQues((question) =>
+            question.map((val,index) => {
+                if (index ===selectedIndex) {
+                    val.youTubevideoLink = item.target.value
+                }
+                return val;
+            })
+        );
+    }
     const uploadQuizData=async()=>{
          if(loading){
             console.log("Please Wait for Adding New Quiz");
@@ -106,20 +117,20 @@ const ActivityQuestions=(props)=>{
             });
             let updatedQuizFormat=changeQuizArrayFormat();
             await props.uploadFunction(updatedQuizFormat);
-            alert(`Quiz ${props.message}`);
             setLoading(false);
         } catch (error) {
             alert(error)
             setLoading(false);
         }
     }
-    const changeQuizArrayFormat=(updatedQuizFormat)=>{
+    const changeQuizArrayFormat=()=>{
         let updatedQuizQuestionArray=[];
         quizQues.forEach((item)=>{
             updatedQuizQuestionArray.push({
                 correctAnswerIndex:item.correctAnswerIndex,
                 options:item.options,
-                question:item.question
+                question:item.question,
+                youTubevideoLink:item.youTubevideoLink
             });
         })
         return updatedQuizQuestionArray;
@@ -154,7 +165,7 @@ const ActivityQuestions=(props)=>{
                                 <div style={{display:'flex',flexDirection: 'column',alignItems:"center",width:'100%'}}>
                                     <h3 style={{fontWeight:"bold",textAlign:"left",width:"100%",marginLeft:35}}>Options</h3>
                                     {
-                                        optionsArray.map((opt,optIndex)=>(
+                                        item.options.map((opt,optIndex)=>(
                                             <TextField 
                                                 style={{ marginRight: '.5rem',marginLeft:"5px"  }} 
                                                 InputProps={{ sx: { height: 40 } }} 
@@ -169,6 +180,18 @@ const ActivityQuestions=(props)=>{
                                         ))
                                     }
                                 </div>
+                                <h3 style={{fontWeight:"bold",textAlign:"left",marginLeft:17}}>YouTube link (not mandatory)</h3>
+                                <TextField 
+                                    style={{ marginRight: '.5rem',marginLeft:"5px"  }} 
+                                    InputProps={{ sx: { height: 40} }} 
+                                    sx={{ width: '80%' }} 
+                                    margin="normal" 
+                                    type={'text'} 
+                                    variant="outlined" 
+                                    placeholder='Paste Youtube Video Link'
+                                    value={item.youTubevideoLink}
+                                    onChange={(videoLink)=>handlevideoLinkChange(videoLink,index)}
+                                />
                                 <h3 style={{fontWeight:"bold"}}>Correct answer</h3>
                                 <select  
                                     style={{
