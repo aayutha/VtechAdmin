@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box,  TextField, Typography } from "@mui/material";
+import { Box, TextField, Typography } from "@mui/material";
 import { db } from "../../firebase";
 import { addDoc, collection,getDocs } from "firebase/firestore";
 import ActivityQuestions from './ActivityQuestions';
@@ -61,11 +61,11 @@ const Activity = () => {
     } catch (error) {
         alert(error);
     }
-}
+  }
   return (
     <div style={{
-      display:"flex",
-      width:"100%",
+      display: "flex",
+      width: "100%",
       justifyContent: 'space-around',
     }}>
       <form>
@@ -86,20 +86,20 @@ const Activity = () => {
             },
           }}
         >
-          <Typography 
-            variant="h5" 
-            padding={3} 
+          <Typography
+            variant="h5"
+            padding={3}
             textAlign="center">
             Activity
           </Typography>
 
-          <TextField 
-            sx={{ width: 350 }} 
-            margin="normal" 
-            type={'text'} 
-            variant="outlined" 
-            placeholder="Activity Name" 
-            onChange={(event) => setActivityName(event.target.value)} 
+          <TextField
+            sx={{ width: 350 }}
+            margin="normal"
+            type={'text'}
+            variant="outlined"
+            placeholder="Activity Name"
+            onChange={(event) => setActivityName(event.target.value)}
           />
           <TextField 
               InputProps={{ inputProps: { min: 1 } }} sx={{ width: 350 }} 
@@ -142,16 +142,16 @@ const Activity = () => {
         </Box>
       </form>
       {
-        NOQuestion===''?null:
-        <ActivityQuestions
-          numofQues={NOQuestion}
-          uploadFunction={uploadToFireBase}
-          title="Post Quiz"
-          alreadyUploadedQuiiz={null}
-          message={"Created"}
-          activityName={ActivityName}
-          quizID={null}
-        />
+        NOQuestion === '' ? null :
+          <ActivityQuestions
+            numofQues={NOQuestion}
+            uploadFunction={uploadToFireBase}
+            title="Post Quiz"
+            alreadyUploadedQuiiz={null}
+            message={"Created"}
+            activityName={ActivityName}
+            quizID={null}
+          />
       }
     </div>
   );
