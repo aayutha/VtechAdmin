@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { db } from "../../firebase";
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, getDocs, where, query } from "firebase/firestore";
 import { DataGrid } from '@mui/x-data-grid';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -18,14 +18,16 @@ const Feedback = () => {
   }, [])
   const getOrderData = async () => {
     let resultArray = [];
-    const docRef = collection(db, "UserPerformance");
     try {
-      const docSnap = await getDocs(docRef);
-      docSnap.forEach((item) => {
-        resultArray.push({ id: item.id, ...item.data() });
-      });
-      setOrderDetail(resultArray);
-
+      let conditionTwo = where("status", "==", 'pending');
+      const baseQuery = query(collection(db, "UserPerformance"), conditionTwo);
+      getDocs(baseQuery).then((res) => {
+        res.forEach((item) => {
+          resultArray.push({ id: item.id, ...item.data() });
+        })
+        console.log(resultArray);
+        setOrderDetail(resultArray);
+      })
     } catch (error) {
       console.log(error)
     }
