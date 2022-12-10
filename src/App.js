@@ -49,7 +49,7 @@ function App() {
                 getAutherUserDetails: getAutherUserDetails,
                 userEmail: userEmail,
                 setUserEmail: setUserEmail
-                
+
               }}>
                 <Routes>
                   <Route path="/" element={<Home />} />

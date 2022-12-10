@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { db } from "../../firebase";
-import { addDoc, collection, getDocs, where, query } from "firebase/firestore";
+import { addDoc, collection, getDocs, where, query, doc, updateDoc } from "firebase/firestore";
 import { DataGrid } from '@mui/x-data-grid';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -12,7 +12,8 @@ const Feedback = () => {
   const [UserID, setUserID] = useState('')
   const [Feedback, setFeedback] = useState("")
   const [orderDetail, setOrderDetail] = useState([]);
-  const [selectedActivity,selctedActivityForFeedback]=useState([]);
+  const [selectedActivity, selctedActivityForFeedback] = useState([]);
+  const [mainId, setmainId] = useState("")
   useEffect(() => {
     getOrderData();
   }, [])
@@ -47,13 +48,13 @@ const Feedback = () => {
     }
     else {
       try {
-        await addDoc(collection(db, "UserPerformance"), {
+        const dbRef = doc(db, "UserPerformance", mainId);
+        await updateDoc(dbRef, {
           AdminFeedback: Feedback,
-          quizID: QuizID,
-          UserID: UserID,
+          status: "completed",
           ReviewerName: ReviewName
         }).then((docRef) => {
-          console.log(docRef.id)
+          console.log(docRef)
           toast.success('🦄 Your feedback has given to student', {
             position: "top-center",
             autoClose: 5000,
@@ -73,13 +74,15 @@ const Feedback = () => {
       }
     }
   }
-  const filterSelectedData=(selectedID)=>{
-    const resultedActivity=orderDetail.filter((item)=>{
-      return item.id===selectedID.id
+  const filterSelectedData = (selectedID) => {
+    const resultedActivity = orderDetail.filter((item) => {
+      return item.id === selectedID.id
     })
     selctedActivityForFeedback(resultedActivity[0].QuesArray);
     setQuizID(resultedActivity[0].UserID)
     setUserID(resultedActivity[0].quizID)
+    setmainId(resultedActivity[0].id)
+
   }
   return (
     <>
@@ -121,10 +124,10 @@ const Feedback = () => {
         <div style={{ height: "500px", margin: "auto", width: "auto", marginTop: "30px", marginBottom: "10%", borderRadius: "35px", width: "60%" }}>
           <h1>Feedback on assignment</h1>
           <DataGrid
-            onRowClick={(params)=>filterSelectedData(params)}
+            onRowClick={(params) => filterSelectedData(params)}
             rows={
               orderDetail.map((item, index) => (
-                { sno: i++, id: item.id, Feedback: item.AdminFeedback, Name: item.ReviewerName,status:item.status }
+                { sno: i++, id: item.id, Feedback: item.AdminFeedback, Name: item.ReviewerName, status: item.status }
               ))}
             columns={[
               { field: 'sno', headerName: 'sno', width: 40 },
@@ -141,40 +144,40 @@ const Feedback = () => {
       </Box>
       <ToastContainer />
       {
-        selectedActivity.length===0?null:
-        selectedActivity.map((item,index)=>(
-          <div>
-            <div style={{
-                width:500,
-                display:"flex",
+        selectedActivity.length === 0 ? null :
+          selectedActivity.map((item, index) => (
+            <div>
+              <div style={{
+                width: 500,
+                display: "flex",
                 flexDirection: "column",
-                alignItems:"center",
+                alignItems: "center",
                 marginTop: 10,
-                marginBottom:10,
-            }} className="qustion-div">
-                <div style={{width:'80%'}}>
-                    <h3 style={{fontWeight:"bold",textAlign:"left",marginLeft:10}}>Question {index+1}</h3>
-                    <h4 style={{fontWeight:"bold",textAlign:"left",marginLeft:25}}>{item.question}</h4>
+                marginBottom: 10,
+              }} className="qustion-div">
+                <div style={{ width: '80%' }}>
+                  <h3 style={{ fontWeight: "bold", textAlign: "left", marginLeft: 10 }}>Question {index + 1}</h3>
+                  <h4 style={{ fontWeight: "bold", textAlign: "left", marginLeft: 25 }}>{item.question}</h4>
                 </div>
-                <div style={{width:'80%',}}>
-                    <h3 style={{fontWeight:"bold",textAlign:"left",marginLeft:10}}>Options</h3>
-                    {
-                      item.options.map((val,index)=>(
-                        <h4 style={{fontWeight:"bold",textAlign:"left",marginLeft:25}}>{val.answer}</h4>
-                      ))
-                    }
+                <div style={{ width: '80%', }}>
+                  <h3 style={{ fontWeight: "bold", textAlign: "left", marginLeft: 10 }}>Options</h3>
+                  {
+                    item.options.map((val, index) => (
+                      <h4 style={{ fontWeight: "bold", textAlign: "left", marginLeft: 25 }}>{val.answer}</h4>
+                    ))
+                  }
                 </div>
-                <div style={{width:'90%',display:"flex",justifyContent: 'space-between',}}>
-                    <h4 style={{fontWeight:"bold",textAlign:"left",}}>
-                      Correct Answer {item.correctAnswerIndex}
-                    </h4>
-                    <h4 style={{fontWeight:"bold",textAlign:"left",}}>
-                      Selected option By User {item.selectedOption}
-                    </h4> 
+                <div style={{ width: '90%', display: "flex", justifyContent: 'space-between', }}>
+                  <h4 style={{ fontWeight: "bold", textAlign: "left", }}>
+                    Correct Answer {item.correctAnswerIndex}
+                  </h4>
+                  <h4 style={{ fontWeight: "bold", textAlign: "left", }}>
+                    Selected option By User {item.selectedOption}
+                  </h4>
                 </div>
               </div>
             </div>
-        ))
+          ))
       }
     </>
   );
