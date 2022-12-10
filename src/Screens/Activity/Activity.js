@@ -18,6 +18,12 @@ const Activity = () => {
     getOrderData();
   }, [setNOQuestion])
 
+  const getCourse=(courseID)=>{
+    const getCourse=orderDetail.filter((item)=>{
+      return courseID===item.id;
+    })
+    setCousreref(getCourse[0]);
+  }
   const getOrderData = async () => {
     let resultArray = [];
     const docRef = collection(db, "Courses");
@@ -57,8 +63,9 @@ const Activity = () => {
             ActivityName: ActivityName,
             NOQues: NOQuestion,
             QuesArray: updatedQuizFormat,
-            courseRef:courseref
-        }).then((docRef) => {
+            courseRef:courseref.id,
+            courseName:courseref.Name
+        }).then(() => {
            toast.success('🦄 Your Course has is added', {
             position: "top-center",
             autoClose: 5000,
@@ -141,7 +148,7 @@ const Activity = () => {
                   borderWidth:1,
                   borderRadius:5
               }}
-              onChange={(item)=>setCousreref(item.target.value)}>
+              onChange={(item)=>getCourse(item.target.value)}>
               {
                   orderDetail.map((value)=>(
                       <option value={value.id} style={{marginTop:5,padding:10}}>{value.Name}</option>
