@@ -7,6 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 const Feedback = () => {
   let i = 1;
+  const den = []
   const [ReviewName, setReviewName] = useState("")
   const [QuizID, setQuizID] = useState('')
   const [UserID, setUserID] = useState('')
@@ -14,13 +15,15 @@ const Feedback = () => {
   const [orderDetail, setOrderDetail] = useState([]);
   const [selectedActivity, selctedActivityForFeedback] = useState([]);
   const [mainId, setmainId] = useState("")
+  const [ReviewStars, setReviewStars] = useState("")
+  const [Stars, setStars] = useState([])
   useEffect(() => {
     getOrderData();
   }, [])
   const getOrderData = async () => {
     let resultArray = [];
     try {
-      let conditionTwo = where("status", "==", 'pending');
+      let conditionTwo = where("status", "==", 'Pending');
       const baseQuery = query(collection(db, "UserPerformance"), conditionTwo);
       getDocs(baseQuery).then((res) => {
         res.forEach((item) => {
@@ -34,6 +37,7 @@ const Feedback = () => {
     }
   }
   const SubmitFeedback = async () => {
+    setArrayStars();
     if (Feedback === "" || QuizID === "" || UserID === "" || ReviewName === "") {
       toast.warning('Please fill all the fields', {
         position: "top-center",
@@ -48,11 +52,13 @@ const Feedback = () => {
     }
     else {
       try {
+        console.log(den)
         const dbRef = doc(db, "UserPerformance", mainId);
         await updateDoc(dbRef, {
           AdminFeedback: Feedback,
           status: "completed",
-          ReviewerName: ReviewName
+          ReviewerName: ReviewName,
+          StarArray: Stars
         }).then((docRef) => {
           console.log(docRef)
           toast.success('🦄 Your feedback has given to student', {
@@ -84,6 +90,18 @@ const Feedback = () => {
     setmainId(resultedActivity[0].id)
 
   }
+  const setArrayStars = () => {
+    console.log(ReviewStars)
+
+    let i = 0;
+    for (i = 0; i < ReviewStars; i++) {
+      Stars.push("stars")
+    }
+    // console.log(den)
+    // const done = den;
+    // setStars(done)
+    console.log(Stars)
+  }
   return (
     <>
       <Box display="flex"
@@ -112,6 +130,8 @@ const Feedback = () => {
               <TextField sx={{ width: 350 }} margin="normal" type={'text'} variant="outlined" placeholder="UserID" value={UserID} />
               <TextField sx={{ width: 350 }} margin="normal" type={'text'} variant="outlined" placeholder="Reviewer Name" onChange={(event) => setReviewName(event.target.value)} />
               <TextField sx={{ width: 350 }} InputProps={{ sx: { height: 180 } }} margin="normal" type={'text'} variant="outlined" placeholder="Feedback" onChange={(event) => setFeedback(event.target.value)} />
+              <TextField sx={{ width: 350 }} margin="normal" type={'text'} variant="outlined" placeholder="Stars" onChange={(event) => setReviewStars(event.target.value)} />
+
               <Button
                 sx={{ marginTop: 3, borderRadius: 3, width: 220 }}
                 variant="contained"
