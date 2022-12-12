@@ -52,27 +52,43 @@ const Login = () => {
           <TextField margin="normal" type={'password'} variant="outlined" placeholder="Password" onChange={(event) => setpassword(event.target.value)} />
 
           <Button
-            sx={{ marginTop: 3, borderRadius: 1, width: "57%" ,backgroundColor:"orange",}}
+            sx={{ marginTop: 3, borderRadius: 1, width: "57%", backgroundColor: "orange", }}
             variant="contained"
             color="warning"
             onClick={newUser}
           >Login</Button>
           <Link
             style={{
-              textDecoration:'none',
-              color:"white",
-              height:40,
-              width:"57%",
-              backgroundColor:"orange",
-              borderRadius:3,
-              display:"flex",
-              alignItems:"center",
+              textDecoration: 'none',
+              color: "white",
+              height: 40,
+              width: "57%",
+              backgroundColor: "orange",
+              borderRadius: 3,
+              display: "flex",
+              alignItems: "center",
               justifyContent: 'center',
               marginTop: 10,
             }}
             to="sign">
-              Create Account
-            </Link>
+            Create Account
+          </Link>
+          <Link
+            style={{
+              textDecoration: 'none',
+              color: "white",
+              height: 40,
+              width: "57%",
+              backgroundColor: "orange",
+              borderRadius: 3,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: 'center',
+              marginTop: 10,
+            }}
+            to="ForgotPassword">
+            Forgot password?
+          </Link>
         </Box>
       </form>
     </div>
