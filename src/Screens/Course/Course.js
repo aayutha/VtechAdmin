@@ -23,6 +23,9 @@ const Course = () => {
   const [courseName, setcourseName] = useState("")
   const [Cdescription, setCdescription] = useState("")
   const [CImageUrl, setCImageUrl] = useState("")
+  const [CAName, setCAName] = useState("")
+  const [CAExp, setCAExp] = useState("")
+
   const [orderDetail, setOrderDetail] = useState([]);
 
 
@@ -87,7 +90,10 @@ const Course = () => {
         await addDoc(collection(db, "Courses"), {
           Name: courseName,
           Description: Cdescription,
-          ImageUrl: CImageUrl
+          ImageUrl: CImageUrl,
+          adminName: CAName,
+          AdminExperience: CAExp
+
         }).then((docRef) => {
           console.log(docRef.id)
 
@@ -150,6 +156,9 @@ const Course = () => {
               <TextField sx={{ width: 300 }} margin="normal" type={'text'} variant="outlined" placeholder="Course Name" onChange={(event) => setcourseName(event.target.value)} />
               <TextField sx={{ width: 300 }} margin="normal" type={'text'} variant="outlined" placeholder="Course Detail" onChange={(event) => setCdescription(event.target.value)} />
               <TextField sx={{ width: 300 }} margin="normal" type={'text'} variant="outlined" placeholder="Course ImageUrl" onChange={(event) => setCImageUrl(event.target.value)} />
+              <TextField sx={{ width: 300 }} margin="normal" type={'text'} variant="outlined" placeholder="Course Admin Name" onChange={(event) => setCAName(event.target.value)} />
+              <TextField sx={{ width: 300 }} margin="normal" type={'text'} variant="outlined" placeholder="Course Admin Exp" onChange={(event) => setCAExp(event.target.value)} />
+
               {/* mui list code */}
 
               <Button
