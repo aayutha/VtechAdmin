@@ -2,30 +2,31 @@ import React, { useState } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth,db } from "../../firebase";
-import { addDoc, collection, } from "firebase/firestore";
-import { Link } from "react-router-dom";
+import { doc, setDoc, collection, } from "firebase/firestore";
+import { Link,useNavigate } from "react-router-dom";
 const Signup = () => {
   const [email, setemail] = useState('')
   const [password, setpassword] = useState('');
+  const navigate = useNavigate()
   const createNewUser = async () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        console.log(user.id)
-        addDoc(collection(db, "UserCollection",user.uid), {
+        console.log(user.uid)
+        const userRef = doc(db, 'UserCollection', user.uid);
+        setDoc(userRef,{
           admin:true,
           email: email,
-        }).then((docRef) => {
-          console.log("user added");
-        }).catch((error) => {
-            console.log(error.code)
-            console.log(error.message)  
-        });
+        })
+        .then(() => {
+          alert("Account Created");
+          navigate('/VTechadmin')
+        })
       })
       .catch((error) => {
         switch (error.code) {
           case "auth/email-already-in-use":
-            console.log("Email Already Exists")
+            alert("Email Already Exists")
             break;
           default:
             break;

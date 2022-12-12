@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase";
 import { Link } from "react-router-dom";
+import {ContextData} from '../../App';
 const Login = () => {
+  const {getAutherUserDetails}=useContext(ContextData);
   const [email, setemail] = useState('')
   const [password, setpassword] = useState('');
   const newUser = async () => {
@@ -11,14 +13,16 @@ const Login = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // const user = userCredential.user;
+        console.log(userCredential.user.uid)
+        getAutherUserDetails(userCredential.user.uid)
       })
       .catch((error) => {
         switch (error.code) {
           case "auth/user-not-found":
-            console.log("Incorrect Email")
+            alert("Incorrect Email")
             break;
           case "auth/wrong-password":
-            console.log("Incorrect Password");
+            alert("Incorrect Password");
             break;
           default:
             break;
@@ -70,7 +74,7 @@ const Login = () => {
               justifyContent: 'center',
               marginTop: 10,
             }}
-            to="sign">
+            to="/VTechadmin/sign">
             Create Account
           </Link>
           <Link
@@ -86,7 +90,7 @@ const Login = () => {
               justifyContent: 'center',
               marginTop: 10,
             }}
-            to="ForgotPassword">
+            to="/VTechadmin/ForgotPassword">
             Forgot password?
           </Link>
         </Box>

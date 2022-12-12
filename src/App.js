@@ -15,7 +15,7 @@ function App() {
   const [userUid, setUserUid] = useState(null);
   const [userEmail, setUserEmail] = useState(null);
   useEffect(() => {
-    getAutherUserDetails();
+    // getAutherUserDetails();
   }, []);
   async function getAutherUserDetails(userValue) {
     const auth = getAuth();
@@ -33,24 +33,24 @@ function App() {
   }
   return (
     <>
-      {
-        !userUid ?
+        <ContextData.Provider value={{
+          userUid: userUid,
+          getAutherUserDetails: getAutherUserDetails,
+          userEmail: userEmail,
+          setUserEmail: setUserEmail
+
+        }}>
+        {
+          !userUid ?
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/VTechadmin" element={<Login />} />
-            <Route path="/sign" element={<Signup />} />
-            <Route path="/ForgotPassword" element={<Forgotpass />} />
+            <Route path="/VTechadmin/sign" element={<Signup />} />
+            <Route path="/VtechAdmin/ForgotPassword" element={<Forgotpass />} />
           </Routes> :
           <div className="App">
             {
               userUid &&
-              <ContextData.Provider value={{
-                userUid: userUid,
-                getAutherUserDetails: getAutherUserDetails,
-                userEmail: userEmail,
-                setUserEmail: setUserEmail
-
-              }}>
                 <Routes>
                   <Route path="/" element={<Home />} />
                   <Route path="VTechadmin" element={<Home />} />
@@ -59,11 +59,10 @@ function App() {
                   <Route path="Activity" element={<Activity />} />
                   <Route path="Activity/listactivity" element={<ListActivity />} />
                 </Routes>
-              </ContextData.Provider>
             }
           </div>
-      }
-
+        }
+        </ContextData.Provider>
     </>
   );
 }

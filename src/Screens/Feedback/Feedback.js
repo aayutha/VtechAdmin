@@ -29,7 +29,6 @@ const Feedback = () => {
         res.forEach((item) => {
           resultArray.push({ id: item.id, ...item.data() });
         })
-        console.log(resultArray);
         setOrderDetail(resultArray);
       })
     } catch (error) {
@@ -52,7 +51,6 @@ const Feedback = () => {
     }
     else {
       try {
-        console.log(den)
         const dbRef = doc(db, "UserPerformance", mainId);
         await updateDoc(dbRef, {
           AdminFeedback: Feedback,
@@ -60,7 +58,6 @@ const Feedback = () => {
           ReviewerName: ReviewName,
           StarArray: Stars
         }).then((docRef) => {
-          console.log(docRef)
           toast.success('🦄 Your feedback has given to student', {
             position: "top-center",
             autoClose: 5000,
@@ -71,6 +68,8 @@ const Feedback = () => {
             theme: "light",
           });
           getOrderData();
+          setQuizID('');
+          setUserID('');
         }).catch((error) => {
           console.log(error.code)
           console.log(error.message)
@@ -96,18 +95,10 @@ const Feedback = () => {
     }
     
    else{
-    console.log(ReviewStars)
     let i = 0;
     for (i = 0; i <ReviewStars; i++) {
-     
       Stars.push("stars")
-      
-      
     }}
-    // console.log(den)
-    // const done = den;
-    // setStars(done)
-    console.log(Stars)
     
   }
   return (
