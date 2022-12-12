@@ -30,6 +30,7 @@ const Feedback = () => {
           resultArray.push({ id: item.id, ...item.data() });
         })
         setOrderDetail(resultArray);
+        setStars([])
       })
     } catch (error) {
       console.log(error)
@@ -90,16 +91,18 @@ const Feedback = () => {
 
   }
   const setArrayStars = () => {
-    if(ReviewStars>5){
-           console.log("wait")
-    }
-    
-   else{
     let i = 0;
-    for (i = 0; i <ReviewStars; i++) {
+    for (i = 0; i < ReviewStars; i++) {
       Stars.push("stars")
-    }}
-    
+    }
+
+  }
+  const setnumques = (num) => {
+    if (num.target.value > 5) {
+      alert("Maximum 5 questions are allow");
+      return;
+    }
+    setReviewStars(num.target.value)
   }
   return (
     <>
@@ -128,10 +131,10 @@ const Feedback = () => {
               <TextField sx={{ width: 350 }} margin="normal" type={'text'} variant="outlined" placeholder="Quiz ID" value={QuizID} />
               <TextField sx={{ width: 350 }} margin="normal" type={'text'} variant="outlined" placeholder="UserID" value={UserID} />
               <TextField sx={{ width: 350 }} margin="normal" type={'text'} variant="outlined" placeholder="Reviewer Name" onChange={(event) => setReviewName(event.target.value)} />
-              <TextField sx={{ width: 350 }} InputProps={{ sx: { height: 180 } }} margin="normal" type='text' variant="outlined" placeholder="Feedback" onChange={(event) => setFeedback(event.target.value)}   />
-              <TextField sx={{ width: 350 }} margin="normal" type='number' variant="outlined" placeholder="Stars" onChange={(event) => setReviewStars(event.target.value)}   inputProps={{
-        maxLength: 2,
-      }} />
+              <TextField sx={{ width: 350 }} InputProps={{ sx: { height: 180 } }} margin="normal" type='text' variant="outlined" placeholder="Feedback" onChange={(event) => setFeedback(event.target.value)} />
+              <TextField sx={{ width: 350 }} margin="normal" type='number' variant="outlined" placeholder="Stars" onChange={(event) => setnumques(event)} inputProps={{
+                maxLength: 2,
+              }} />
 
               <Button
                 sx={{ marginTop: 3, borderRadius: 3, width: 220 }}
