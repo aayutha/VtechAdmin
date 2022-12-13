@@ -11,6 +11,7 @@ const Forgotpass = () => {
 
           console.log("link sent successfully")
           setemail("")
+          alert("Link Send Successfully (Check Spam Also)")
         })
         .catch((error) => {
           const errorCode = error.code;

@@ -28,7 +28,8 @@ const ActivityQuestions=(props)=>{
                         {label: 'D', value: 'D'},
                     ],
                     youTubevideoLink:"",
-                    selectedOption:""
+                    selectedOption:"",
+                    userAnswer:""
                 })
             }
             setQuizQues(questionsArray);
@@ -47,7 +48,8 @@ const ActivityQuestions=(props)=>{
                     options:props.alreadyUploadedQuiiz[i].options,
                     correctOptionDropDowns:drowDownOption,
                     youTubevideoLink:props.alreadyUploadedQuiiz[i].youTubevideoLink,
-                    selectedOption:""
+                    selectedOption:"",
+                    userAnswer:""
                 })
             }
             setQuizQues(questionsArray)
@@ -168,7 +170,8 @@ const ActivityQuestions=(props)=>{
                 options:item.options,
                 question:item.question,
                 youTubevideoLink:item.youTubevideoLink,
-                selectedOption:""
+                selectedOption:"",
+                userAnswer:""
             });
         })
         return updatedQuizQuestionArray;

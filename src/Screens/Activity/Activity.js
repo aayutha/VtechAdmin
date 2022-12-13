@@ -32,6 +32,7 @@ const Activity = () => {
       docSnap.forEach((item) => {
         resultArray.push({ id: item.id, ...item.data()});
       });
+      setCousreref(resultArray[0]);
       setOrderDetail(resultArray);
     } catch (error) {
       console.log(error)
@@ -149,9 +150,10 @@ const Activity = () => {
                   borderRadius:5
               }}
               onChange={(item)=>getCourse(item.target.value)}>
+                
               {
                   orderDetail.map((value)=>(
-                      <option value={value.id} style={{marginTop:5,padding:10}}>{value.Name}</option>
+                      <option value={value} style={{marginTop:5,padding:10}}>{value.Name}</option>
                   ))
               }
           </select>

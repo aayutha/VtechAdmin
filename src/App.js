@@ -10,13 +10,11 @@ import Activity from './Screens/Activity/Activity';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import ListActivity from './Screens/Activity/ListActivity';
 import Home from './Screens/MainPage';
+import NoMatch from './Screens/NoMatch';
 export const ContextData = createContext();
 function App() {
   const [userUid, setUserUid] = useState(null);
   const [userEmail, setUserEmail] = useState(null);
-  useEffect(() => {
-    // getAutherUserDetails();
-  }, []);
   async function getAutherUserDetails(userValue) {
     const auth = getAuth();
     await onAuthStateChanged(auth, (user) => {
@@ -47,6 +45,7 @@ function App() {
             <Route path="/VTechadmin" element={<Login />} />
             <Route path="/VTechadmin/sign" element={<Signup />} />
             <Route path="/VtechAdmin/ForgotPassword" element={<Forgotpass />} />
+            <Route path="*" element={<NoMatch />} />
           </Routes> :
           <div className="App">
             {
@@ -58,6 +57,7 @@ function App() {
                   <Route path="FeedBack" element={<Feedback />} />
                   <Route path="Activity" element={<Activity />} />
                   <Route path="Activity/listactivity" element={<ListActivity />} />
+                  <Route path="*" element={<NoMatch />} />
                 </Routes>
             }
           </div>

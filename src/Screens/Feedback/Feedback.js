@@ -191,6 +191,10 @@ const Feedback = () => {
                     ))
                   }
                 </div>
+                <div style={{width:"100%",}}>
+                  <h3 style={{ fontWeight: "bold", textAlign: "left", marginLeft: 25 }}>Answer Given by User</h3>
+                  <h4 style={{ fontWeight: "bold", textAlign: "left", marginLeft: 25 }}>{item.userAnswer}</h4>
+                </div>
                 <div style={{ width: '90%', display: "flex", justifyContent: 'space-between', }}>
                   <h4 style={{ fontWeight: "bold", textAlign: "left", }}>
                     Correct Answer {item.correctAnswerIndex}

@@ -4,15 +4,17 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase";
 import { Link } from "react-router-dom";
 import {ContextData} from '../../App';
+import { useEffect } from "react";
 const Login = () => {
   const {getAutherUserDetails}=useContext(ContextData);
   const [email, setemail] = useState('')
   const [password, setpassword] = useState('');
+  useEffect(()=>{
+    getAutherUserDetails()
+  },[])
   const newUser = async () => {
-    console.log("use")
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // const user = userCredential.user;
         console.log(userCredential.user.uid)
         getAutherUserDetails(userCredential.user.uid)
       })
